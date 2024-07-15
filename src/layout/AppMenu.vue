@@ -4,6 +4,47 @@ import { ref } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
+{
+     items: [
+            {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Sales',
+        items: [
+            { label: 'Orders', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Invoices', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Customers', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Lead', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
+            { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+        ] },
+         { label: 'Inventory',
+        items: [
+            { label: 'Products', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Pricing', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Customer Pricing', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Real Time Inventory', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Forecasting', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Deductions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Stock Movement', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+        ] },
+            { label: 'Sourcing', icon: 'pi pi-fw pi-bookmark', to: '/uikit/table' },
+            { label: 'Dispatch', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/table' },
+            { label: 'Logistics', icon: 'pi pi-fw pi-mobile', to: '/uikit/table', class: 'rotated-icon' },
+            { label: 'Coupons', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
+            { label: 'Customers', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+            { label: 'Lead', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
+            { label: 'Commissions', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
+            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
+            { label: 'Feedback', icon: 'pi pi-fw pi-image', to: '/uikit/media' },
+        ]
+},
+    
     {
         label: 'Home',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
@@ -11,17 +52,17 @@ const model = ref([
     {
         label: 'UI Components',
         items: [
-            { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-            { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
-            { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
-            { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
-            { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
-            { label: 'Table', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
-            { label: 'List', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-            { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
-            { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
-            { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
-            { label: 'Media', icon: 'pi pi-fw pi-image', to: '/uikit/media' },
+            { label: 'Sales', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
+            { label: 'Inventory', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
+            { label: 'Sourcing', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
+            { label: 'Dispatch', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
+            { label: 'Logistics', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
+            { label: 'Coupons', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
+            { label: 'Customers', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+            { label: 'Lead', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
+            { label: 'Commissions', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
+            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
+            { label: 'Feedback', icon: 'pi pi-fw pi-image', to: '/uikit/media' },
             { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/uikit/menu', preventExact: true },
             { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/uikit/message' },
             { label: 'File', icon: 'pi pi-fw pi-file', to: '/uikit/file' },
