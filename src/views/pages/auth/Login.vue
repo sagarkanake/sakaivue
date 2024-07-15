@@ -2,27 +2,40 @@
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
 import AppConfig from '@/layout/AppConfig.vue';
-
+import { useToast } from 'primevue/usetoast';
+import { useRouter } from 'vue-router';
 const { layoutConfig } = useLayout();
+const toast = useToast();
+const router = useRouter();
 const email = ref('');
 const password = ref('');
 const checked = ref(false);
 
 const logoUrl = computed(() => {
-    return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    // return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    return `/demo/images/logo.png`;
 });
+
+const login = () => {
+    if(email.value == 'sankalpa@digitalflake.com' && password.value =='123456'){
+    router.push('/');
+    }else{
+    toast.add({ severity: 'Error', summary: 'Error', detail: 'Login Failed..!!', life: 1000 });
+
+    }
+ 
+};
 </script>
 
 <template>
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
-            <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
-                    <div class="text-center mb-5">
-                        <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
-                        <div class="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
-                        <span class="text-600 font-medium">Sign in to continue</span>
+            <div>
+                <div class="w-full surface-card py-8 px-5 sm:px-8">
+                    <div class="text-left mb-5">
+                        <div class="text-900 text-3xl font-medium mb-3">Login</div>
+                        <span class="text-600 font-medium">Enter your email below to login to your account</span>
                     </div>
 
                     <div>
@@ -34,12 +47,13 @@ const logoUrl = computed(() => {
 
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label>
+                                <!-- <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
+                                <label for="rememberme1">Remember me</label> -->
                             </div>
-                            <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
+                            <!-- <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a> -->
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl"></Button>
+                        <Toast/>
+                        <Button label="Sign In" class="w-full p-3 text-xl" @click="login()"></Button>
                     </div>
                 </div>
             </div>
