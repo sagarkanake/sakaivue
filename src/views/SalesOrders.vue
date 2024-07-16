@@ -136,7 +136,7 @@ const initFilters = () => {
 </script>
 
 <template>
-    <div class="grid">
+    <div class="grid" :style="{'margin-left':'-50px','margin-top':'-30px'}">
 <div class="col-12 lg:col-3 xl:col-3">
   <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
     <div class="flex justify-content-between mb-2 ml-2 mt-2">
@@ -145,8 +145,8 @@ const initFilters = () => {
         <div class="text-xl font-bold mt--0">1234</div>
       </div>
     </div>
-    <Badge severity="danger" class="ml-2 mt--2">12.89%</Badge>
-    <span icon="pi pi-arrow-down"></span>
+    <Badge severity="danger" class="ml-2 mt--2">          <i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i>
+12.89%</Badge>
     <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
   </div>
 </div>
@@ -159,7 +159,7 @@ const initFilters = () => {
        <div class="text-xl font-bold mt--0">1234</div>
       </div>
     </div>
-       <Badge severity="success" class="ml-2 mt--2">12.89%</Badge>
+       <Badge severity="success" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
            <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
 
   </div>
@@ -173,7 +173,7 @@ const initFilters = () => {
          <div class="text-xl font-bold mt--0">1234</div>
       </div>
     </div>
-     <Badge severity="info" class="ml-2 mt--2">12.89%</Badge>
+     <Badge severity="info" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
          <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
 
   </div>
@@ -187,7 +187,7 @@ const initFilters = () => {
         <div class="text-xl font-bold mt--0">1234</div>
       </div>
     </div>
-     <Badge severity="warning" class="ml-2 mt--2">12.89%</Badge>
+     <Badge severity="warning" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
          <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
 
 
@@ -255,8 +255,8 @@ const initFilters = () => {
                            </div>
                              
                            <div class="flex gap-2" :style="{'margin-right':'-22px' }">
-                            <Button type="button" label="Export" icon="pi pi-file-export"  @click="exportCSV($event)" />
-                            <Button  type="button" label="New" icon="pi pi-plus" :style="{'background-color':'#81C784'}" @click="openNew" />
+                            <Button type="button" label="Export" icon="pi pi-file-export" :style="{'background-color':'#C8E6C9','border':'#C8E6C9'}" @click="exportCSV($event)" />
+                            <Button  type="button" label="New Order" icon="pi pi-plus" :style="{'background-color':'darkgreen','border':'darkgreen'}" @click="openNew" />
                            </div>
                         </div>
                     </template>
