@@ -2,6 +2,9 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
+import Breadcrumb from '../components/Breadcrumb.vue';
+
+// import logoUrl from '/demo/images/sidebar-logo.png'
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
@@ -17,9 +20,12 @@ onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
 
+const breadcrumbHome = ref({ icon: 'pi pi-home', to: '/' });
+const breadcrumbItems = ref([{ label: 'Computer' }, { label: 'Notebook' }, { label: 'Accessories' }, { label: 'Backpacks' }, { label: 'Item' }]);
+
 const logoUrl = computed(() => {
-    // return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-    return `/demo/images/logo.png`;
+    return `/demo/images/${layoutConfig.darkTheme.value ? 'sidebar-logo' : 'sidebar-logo'}.svg`;
+    //  return '/demo/images/sidebar-logo.svg'
 });
 
 const onTopBarMenuButton = () => {
@@ -66,31 +72,23 @@ const isOutsideClicked = (event) => {
 
 <template>
     <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoUrl" alt="logo" />
-            <span>Farm To Feed</span>
+        <router-link to="/" class="layout-topbar-logo" >
+            <img :src="logoUrl" alt="logo" :style="{height: 'auto !important'}"/>
         </router-link>
 
-        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
-            <i class="pi pi-bars"></i>
-        </button>
-
-        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
-            <i class="pi pi-ellipsis-v"></i>
-        </button>
-
+<div class="col-12">
+            <div>
+                 <Breadcrumb />
+            </div>
+        </div>
+    
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+        <button class="p-link layout-menu-button layout-topbar-button" :style="{'margin-right': '80px'}" @click="onMenuToggle()">
+            <i class="pi pi-bell"></i>
+        </button>
+            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button" :style="{'margin-right': '80px'}">
                 <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
+                <span :style="{'font-size': '1rem'}">User Name</span>
             </button>
         </div>
     </div>

@@ -67,6 +67,8 @@ const itemClick = (event, item) => {
 const checkActiveRoute = (item) => {
     return route.path === item.to;
 };
+console.log( " isActiveMenu ", isActiveMenu)
+console.log(' layoutState ', layoutState )
 </script>
 
 <template>

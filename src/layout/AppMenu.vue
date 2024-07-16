@@ -9,7 +9,7 @@ const model = ref([
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
             { label: 'Sales',
         items: [
-            { label: 'Orders', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Orders', icon: 'pi pi-fw pi-prime', to: '/salesOrder' },
             { label: 'Invoices', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},

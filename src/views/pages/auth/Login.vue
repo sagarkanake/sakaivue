@@ -12,8 +12,8 @@ const password = ref('');
 const checked = ref(false);
 
 const logoUrl = computed(() => {
-    // return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-    return `/demo/images/logo.png`;
+     return `/demo/images/${layoutConfig.darkTheme.value ? 'login-logo' : 'login-logo'}.svg`;
+    // return `/demo/images/logo.png`;
 });
 
 const login = () => {

@@ -14,6 +14,19 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
+                    path: 'sales',
+                    meta: { breadcrumb: 'Sales' },
+                    children: [
+                        {
+                            path: 'orders',
+                            name: 'sales-orders',
+                            component: () => import('@/views/sales/Orders.vue'),
+                            meta: { breadcrumb: 'Orders' }
+                        },
+                        // Add more Sales child routes here
+                    ]
+                },
+                {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/views/uikit/FormLayout.vue')
@@ -58,7 +71,6 @@ const router = createRouter({
                     name: 'panel',
                     component: () => import('@/views/uikit/Panels.vue')
                 },
-
                 {
                     path: '/uikit/overlay',
                     name: 'overlay',
@@ -140,6 +152,14 @@ const router = createRouter({
                     path: '/documentation',
                     name: 'documentation',
                     component: () => import('@/views/utilities/Documentation.vue')
+                },
+                {
+                    path: '/salesOrder',
+                    name: 'salesOrder',
+                    component: () => import('@/views/SalesOrders.vue'),
+                    meta: {
+                        breadcrumb: 'Orders'
+                      }
                 }
             ]
         },
