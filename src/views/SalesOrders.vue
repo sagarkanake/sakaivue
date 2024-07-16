@@ -137,53 +137,63 @@ const initFilters = () => {
 
 <template>
     <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0" :style="{'padding': '0 !important','height':'110%'}">
-                <div class="flex justify-content-between mb-2" :style="{'margin-left':'8px','margin-top':'10px'}">
-                    <div >
-                        <span class="block text-500 font-medium mb-3">Total Orders</span>
-                        <div class="text-xl" :style="{'font-weight': 600,'margin-top':'-8px'}">1234</div>
-                    </div>
-                </div>
-                <Badge severity="danger" :style="{'margin-left':'8px','margin-top':'-6px'}"> 12.89%</Badge>
-            </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0" :style="{'padding': '0 !important','height':'110%'}">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">All Orders</span>
-                        <div class="text-900 font-medium text-xl">$2.100</div>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">%52+ </span>
-                <span class="text-500">since last week</span>
-            </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0" :style="{'padding': '0 !important','height':'110%'}">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Customers</span>
-                        <div class="text-900 font-medium text-xl">28441</div>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">520 </span>
-                <span class="text-500">newly registered</span>
-            </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0" :style="{'padding': '0 !important','height':'110%'}">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Comments</span>
-                        <div class="text-900 font-medium text-xl">152 Unread</div>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">85 </span>
-                <span class="text-500">responded</span>
-            </div>
-        </div>
+<div class="col-12 lg:col-3 xl:col-3">
+  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
+    <div class="flex justify-content-between mb-2 ml-2 mt-2">
+      <div>
+        <span class="block text-500 font-medium mb-1">Total Orders</span>
+        <div class="text-xl font-bold mt--0">1234</div>
+      </div>
+    </div>
+    <Badge severity="danger" class="ml-2 mt--2">12.89%</Badge>
+    <span icon="pi pi-arrow-down"></span>
+    <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
+  </div>
+</div>
+
+<div class="col-12 lg:col-6 xl:col-3">
+  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
+    <div class="flex justify-content-between mb-2 ml-2 mt-2">
+      <div>
+        <span class="block text-500 font-medium mb-1">All Orders</span>
+       <div class="text-xl font-bold mt--0">1234</div>
+      </div>
+    </div>
+       <Badge severity="success" class="ml-2 mt--2">12.89%</Badge>
+           <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
+
+  </div>
+</div>
+
+<div class="col-12 lg:col-6 xl:col-3">
+  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
+    <div class="flex justify-content-between mb-2 ml-2 mt-2">
+      <div>
+        <span class="block text-500 font-medium mb-1">Customers</span>
+         <div class="text-xl font-bold mt--0">1234</div>
+      </div>
+    </div>
+     <Badge severity="info" class="ml-2 mt--2">12.89%</Badge>
+         <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
+
+  </div>
+</div>
+
+<div class="col-12 lg:col-6 xl:col-3">
+  <div class="card mb-0 p-0 " :style="{'height': 'calc(110% + 5px)'}">
+    <div class="flex justify-content-between  mb-2 ml-2 mt-2">
+      <div>
+        <span class="block text-500 font-medium mb-1">Comments</span>
+        <div class="text-xl font-bold mt--0">1234</div>
+      </div>
+    </div>
+     <Badge severity="warning" class="ml-2 mt--2">12.89%</Badge>
+         <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
+
+
+  </div>
+</div>
+
         <div class="col-12">
             <div class="card">
                 <!-- <Toolbar class="mb-4">
