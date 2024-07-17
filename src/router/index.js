@@ -20,7 +20,7 @@ const router = createRouter({
                         {
                             path: 'orders',
                             name: 'sales-orders',
-                            component: () => import('@/views/sales/Orders.vue'),
+                            component: () => import('@/views/SalesOrders.vue'),
                             meta: { breadcrumb: 'Orders' }
                         },
                         // Add more Sales child routes here
@@ -160,7 +160,16 @@ const router = createRouter({
                     meta: {
                         breadcrumb: 'Orders'
                       }
-                }
+                },
+                {
+                    path: '/newOrder',
+                    name: 'newOrder',
+                    component: () => import('@/views/NewOrder.vue'),
+                    meta: {
+                        breadcrumb: 'New Order'
+                      }
+                },
+                
             ]
         },
         {

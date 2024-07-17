@@ -3,26 +3,28 @@ import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { ProductService } from '@/service/ProductService';
 import { useToast } from 'primevue/usetoast';
-
+import { useRouter } from 'vue-router';
 const toast = useToast();
 
+const router = useRouter()
 const products = ref(null);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
+const filterDialog = ref(false);
 const product = ref({});
 const selectedProducts = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 const statuses = ref([
-    { label: 'INSTOCK', value: 'instock' },
-    { label: 'LOWSTOCK', value: 'lowstock' },
-    { label: 'OUTOFSTOCK', value: 'outofstock' }
+    { label: 'paid', value: 'Paid' },
+    { label: 'pending', value: 'Pending' },
+    { label: 'unpaid', value: 'Unpaid' }
 ]);
 const status = ref(null);
 const productService = new ProductService();
-const calenderValue = ref(null);
+let calenderValue = ref(null);
 const getBadgeSeverity = (inventoryStatus) => {
     switch (inventoryStatus.toLowerCase()) {
         case 'instock':
@@ -57,6 +59,17 @@ const hideDialog = () => {
     submitted.value = false;
 };
 
+const openFilter = () => {
+    product.value = {};
+    submitted.value = false;
+    filterDialog.value = true;
+};
+
+const clearFilter = () => {
+    calenderValue.value = '';
+    status.value = '';
+    filters['global'].value = '';
+}
 const saveProduct = () => {
     submitted.value = true;
     if (product.value.name && product.value.name.trim() && product.value.price) {
@@ -114,6 +127,10 @@ const createId = () => {
     return id;
 };
 
+const newOrder = () => {
+    router.push('/newOrder');
+};
+
 const exportCSV = () => {
     dt.value.exportCSV();
 };
@@ -136,80 +153,61 @@ const initFilters = () => {
 </script>
 
 <template>
-    <div class="grid" :style="{'margin-left':'-50px','margin-top':'-30px'}">
-<div class="col-12 lg:col-3 xl:col-3">
-  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
-    <div class="flex justify-content-between mb-2 ml-2 mt-2">
-      <div>
-        <span class="block text-500 font-medium mb-1">Total Orders</span>
-        <div class="text-xl font-bold mt--0">1234</div>
-      </div>
-    </div>
-    <Badge severity="danger" class="ml-2 mt--2">          <i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i>
-12.89%</Badge>
-    <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
-  </div>
-</div>
+    <div class="grid" :style="{ 'margin-left': '-50px', 'margin-top': '-30px' }">
+        <div class="col-12 lg:col-3 xl:col-3">
+            <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
+                <div class="flex justify-content-between mb-2 ml-2 mt-2">
+                    <div>
+                        <span class="block text-500 font-medium mb-1">Total Orders</span>
+                        <div class="text-xl font-bold mt--0">1234</div>
+                    </div>
+                </div>
+                <Badge severity="danger" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89%</Badge>
+                <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
+            </div>
+        </div>
 
-<div class="col-12 lg:col-6 xl:col-3">
-  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
-    <div class="flex justify-content-between mb-2 ml-2 mt-2">
-      <div>
-        <span class="block text-500 font-medium mb-1">All Orders</span>
-       <div class="text-xl font-bold mt--0">1234</div>
-      </div>
-    </div>
-       <Badge severity="success" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
-           <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
+                <div class="flex justify-content-between mb-2 ml-2 mt-2">
+                    <div>
+                        <span class="block text-500 font-medium mb-1">All Orders</span>
+                        <div class="text-xl font-bold mt--0">1234</div>
+                    </div>
+                </div>
+                <Badge severity="success" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
+            </div>
+        </div>
 
-  </div>
-</div>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
+                <div class="flex justify-content-between mb-2 ml-2 mt-2">
+                    <div>
+                        <span class="block text-500 font-medium mb-1">Customers</span>
+                        <div class="text-xl font-bold mt--0">1234</div>
+                    </div>
+                </div>
+                <Badge severity="info" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
+            </div>
+        </div>
 
-<div class="col-12 lg:col-6 xl:col-3">
-  <div class="card mb-0 p-0" :style="{'height': 'calc(110% + 5px)'}">
-    <div class="flex justify-content-between mb-2 ml-2 mt-2">
-      <div>
-        <span class="block text-500 font-medium mb-1">Customers</span>
-         <div class="text-xl font-bold mt--0">1234</div>
-      </div>
-    </div>
-     <Badge severity="info" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
-         <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
-
-  </div>
-</div>
-
-<div class="col-12 lg:col-6 xl:col-3">
-  <div class="card mb-0 p-0 " :style="{'height': 'calc(110% + 5px)'}">
-    <div class="flex justify-content-between  mb-2 ml-2 mt-2">
-      <div>
-        <span class="block text-500 font-medium mb-1">Comments</span>
-        <div class="text-xl font-bold mt--0">1234</div>
-      </div>
-    </div>
-     <Badge severity="warning" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{'font-size':'smaller'}"></i> 12.89%        </Badge>
-         <span class="text-400 " :style="{'font-size':'12px'}"> vs last months : 1200</span>
-
-
-  </div>
-</div>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
+                <div class="flex justify-content-between mb-2 ml-2 mt-2">
+                    <div>
+                        <span class="block text-500 font-medium mb-1">Comments</span>
+                        <div class="text-xl font-bold mt--0">1234</div>
+                    </div>
+                </div>
+                <Badge severity="warning" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
+            </div>
+        </div>
 
         <div class="col-12">
             <div class="card">
-                <!-- <Toolbar class="mb-4">
-                    <template v-slot:start>
-                        <div class="my-2">
-                            <Button label="New" icon="pi pi-plus" class="mr-2" severity="success" @click="openNew" />
-                            <Button label="Delete" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />
-                        </div>
-                    </template>
-
-                    <template v-slot:end>
-                        <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
-                        <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)" />
-                    </template>
-                </Toolbar> -->
-
                 <DataTable
                     ref="dt"
                     :value="products"
@@ -223,41 +221,36 @@ const initFilters = () => {
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                 >
                     <template #header>
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px','margin-left':'-15px' }">
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
                             <h5 class="m-0">Orders</h5>
-                            <!-- <IconField iconPosition="left" class="block mt-2 md:mt-0">
-                                <InputIcon class="pi pi-search" />
-                                <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
-                            </IconField> -->
-                
                         </div>
-                        <div class="flex justify-content-between gap-6 mt-2" :style="{'margin-left':'-15px' }">
-                           <div class="flex gap-2 ">
-                             <div >
-                                <IconField iconPosition="left" class="block mt-2 md:mt-0">
-                                    <InputIcon class="pi pi-search" />
-                                    <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
-                                </IconField>
+                        <div class="flex justify-content-between gap-6 mt-2" :style="{ 'margin-left': '-15px' }">
+                            <div class="flex gap-2">
+                                <div>
+                                    <IconField iconPosition="left" class="block mt-2 md:mt-0">
+                                        <InputIcon class="pi pi-search" />
+                                        <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                                    </IconField>
+                                </div>
+                                <div>
+                                    <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Calendar"></Calendar>
+                                </div>
+                                <div>
+                                    <!-- <label for="state">Status</label> -->
+                                    <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Status"></Dropdown>
+                                </div>
+                                <div>
+                                    <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined @click="openFilter()" />
+                                </div>
+                                <div>
+                                    <Button type="button" icon="pi pi-filter-slash" outlined @click="clearFilter()" />
+                                </div>
                             </div>
-                            <div>
-                                   <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false"  placeholder="Calendar"></Calendar>
+
+                            <div class="flex gap-2" :style="{ 'margin-right': '-22px' }">
+                                <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="exportCSV($event)"></Button>
+                                <Button type="button" label="New Order" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
                             </div>
-                            <div >
-                                <!-- <label for="state">Status</label> -->
-                                <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Status"></Dropdown>
-                            </div>
-                               <div>
-                            <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined @click="clearFilter1()" />
-                        </div>
-                        <div>
-                            <Button type="button" icon="pi pi-filter-slash"  outlined @click="clearFilter1()" />
-                        </div>
-                           </div>
-                             
-                           <div class="flex gap-2" :style="{'margin-right':'-22px' }">
-                            <Button type="button" label="Export" icon="pi pi-file-export" :style="{'background-color':'#C8E6C9','border':'#C8E6C9'}" @click="exportCSV($event)" />
-                            <Button  type="button" label="New Order" icon="pi pi-plus" :style="{'background-color':'darkgreen','border':'darkgreen'}" @click="openNew" />
-                           </div>
                         </div>
                     </template>
 
@@ -322,7 +315,7 @@ const initFilters = () => {
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
-                       <template #body>
+                        <template #body>
                             <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
                         </template>
                     </Column>
@@ -342,7 +335,7 @@ const initFilters = () => {
 
                     <div class="field">
                         <label for="inventoryStatus" class="mb-3">Inventory Status</label>
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select a Status">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
                                     <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
@@ -418,6 +411,69 @@ const initFilters = () => {
                     <template #footer>
                         <Button label="No" icon="pi pi-times" text @click="deleteProductsDialog = false" />
                         <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedProducts" />
+                    </template>
+                </Dialog>
+
+                <Dialog v-model:visible="filterDialog" :style="{ width: '350px' }" :modal="true" class="p-fluid">
+                 <template #header>
+    <div class="p-d-flex p-ai-center">
+        <span class="pi pi-filter p-mr-1" style="color: darkgreen;font-weight:700"></span> <!-- PrimeIcons class for the filter icon with custom color -->
+        <span class="p-ml-n6" style="color: darkgreen;font-weight:700;font-size:larger"> More Filters</span> <!-- PrimeFlex classes for margin-left and bold text -->
+    </div>
+</template>
+
+                    <div class="field">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Payment Status">
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value && slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                </div>
+                                <div v-else-if="slotProps.value && !slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                        </Dropdown>
+                    </div>
+
+                     <div class="field">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Customer">
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value && slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                </div>
+                                <div v-else-if="slotProps.value && !slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                        </Dropdown>
+                     </div>
+                        <div class="field">
+                                    <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Select Delivery Date"></Calendar>
+                        </div>
+                        <div class="field">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Delivery Window">
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value && slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                </div>
+                                <div v-else-if="slotProps.value && !slotProps.value.value">
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                        </Dropdown>
+                    </div>
+                    <template #footer>
+                        <Button type = "button" label="Cancel" icon="pi pi-times"  :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
+                        <Button type = "button" label="Save" icon="pi pi-check"  :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
                     </template>
                 </Dialog>
             </div>
