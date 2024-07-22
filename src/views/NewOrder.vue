@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount, computed } from 'vue';
+import { ref, onMounted, onBeforeMount, computed, watch } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { ProductService } from '@/service/ProductService';
 
@@ -60,13 +60,15 @@ const submitted = ref(false);
 const selectedGradeFilter = ref(null);
 const selectedProducts = ref(null);
 const orderNotes = ref(null);
+const selectedItemsArray = ref([]);
+
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 }
+    { sku: 2, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 3, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 4, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 5, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 6, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 }
     // Add more static data as needed
 ]);
 const productService = new ProductService();
@@ -101,12 +103,18 @@ const addNewLineItem = () => {
 };
 
 const addLineItem = () => {
-
-}
+    console.log('selectedProducts ', selectedProducts);
+    productDialog.value = false;
+};
 </script>
 
 <template>
+<div class="flex gap-6">
     <h5 :style="{ 'font-size': 'large', 'font-weight': 'bold', 'margin-left': '-2rem' }">New Order</h5>
+    <div :style="{'margin-left': '30px'}"><Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="addNewLineItem()"></Button></div>
+
+</div>
+    
     <div class="grid" :style="{ 'margin-left': '-2rem' }">
         <div :style="{ width: '64%', 'margin-top': '14px' }">
             <div class="card">
@@ -360,7 +368,7 @@ const addLineItem = () => {
                 </Column>
             </DataTable>
 
-            <Dialog v-model:visible="productDialog" :style="{ width: '650px',height: '430px' }" :modal="true" class="p-fluid">
+            <Dialog v-model:visible="productDialog" :style="{ width: '650px', height: '430px' }" :modal="true" class="p-fluid">
                 <template #header>
                     <div class="dialog-header">
                         <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
@@ -368,7 +376,7 @@ const addLineItem = () => {
                     </div>
                 </template>
                 <div class="card">
-                    <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{'margin-left': '-20px'}">
+                    <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
                         <template #header>
                             <div class="flex justify-content-between" :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
                                 <div>
@@ -422,10 +430,10 @@ const addLineItem = () => {
                         </Column>
                     </DataTable>
                 </div>
-                 <div class="flex justify-content-end gap-2 ml-5">
-                        <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' }" @click="exportCSV($event)"></Button>
-                        <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '100px' }" @click="addNewLineItem()"></Button>
-                    </div>
+                <div class="flex justify-content-end gap-2 ml-5">
+                    <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' }" @click="exportCSV($event)"></Button>
+                    <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '100px' }" @click="addLineItem()"></Button>
+                </div>
             </Dialog>
         </div>
     </div>
