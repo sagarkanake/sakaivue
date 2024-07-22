@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onMounted, onBeforeMount, computed } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { ProductService } from '@/service/ProductService';
 
@@ -8,13 +8,73 @@ const dropdownItems = ref([
     { name: 'Option 2', code: 'Option 2' },
     { name: 'Option 3', code: 'Option 3' }
 ]);
+
+const customerList = ref([
+    { name: 'Alice Johnson', label: 'Alice Johnson' },
+    { name: 'Bob Smith', label: 'Bob Smith' },
+    { name: 'Catherine Brown', label: 'Catherine Brown' },
+    { name: 'David Wilson', label: 'David Wilson' },
+    { name: 'Ella Garcia', label: 'Ella Garcia' },
+    { name: 'Frank White', label: 'Frank White' },
+    { name: 'Grace Taylor', label: 'Grace Taylor' },
+    { name: 'Henry Martinez', label: 'Henry Martinez' },
+    { name: 'Ivy Anderson', label: 'Ivy Anderson' },
+    { name: 'Jack Thomas', label: 'Jack Thomas' }
+]);
+const paymentTypes = ref([
+    { name: 'cash', label: 'Cash' },
+    { name: 'credit', label: 'Credit' }
+]);
+const deliveryLocations = ref([
+    { name: 'headquarter1', label: 'Headquarters 1' },
+    { name: 'headquarter2', label: 'Headquarters 2' },
+    { name: 'headquarter3', label: 'Headquarters 3' }
+]);
+const deliveryMethods = ref([
+    { name: 'pickUpFromWarehouse', label: 'Pick up from warehouse' },
+    { name: 'regularDelivery', label: 'Regular delivery' }
+]);
+const deliveryWindows = ref([
+    { name: '1', label: '6am - 9am' },
+    { name: '2', label: '9am - 12 pm' },
+    { name: '3', label: '1pm - 4 pm' }
+]);
+const gradeFilters = ref([
+    { name: '1', label: 'Grade 1' },
+    { name: '2', label: 'Grade Rescue' }
+]);
 const filters = ref({});
 const dropdownItem = ref(null);
+const selectedCustomer = ref(null);
+const today = new Date();
+const calenderValue = ref(today);
+const selectedPaymentType = ref(null);
+const selectedDeliveryLocation = ref(null);
+const selectedDeliveryMethod = ref(null);
+const selectedDeliveryWindow = ref(null);
+const deliveryDate = ref(null);
+const productDialog = ref(false);
+const products = ref(null);
+const product = ref({});
+const submitted = ref(false);
+const selectedGradeFilter = ref(null);
+const selectedProducts = ref([]);
+const orderNotes = ref(null);
+const tableData = ref([
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    // Add more static data as needed
+]);
 onBeforeMount(() => {
     initFilters();
 });
 onMounted(() => {
-    productService.getProducts().then((data) => (products.value = data));
+    console.log("Table Data ", tableData);
+    //  ProductService.getProducts().then((data) => (products.value = data));
 });
 
 const initFilters = () => {
@@ -22,58 +82,75 @@ const initFilters = () => {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
     };
 };
+
+const getDropdownValue = () => {
+    console.log('Printing selected customer ', selectedCustomer.value.label);
+};
+
+const formattedDate = computed(() => {
+    if (!calenderValue.value) return '-';
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return calenderValue.value.toLocaleDateString(undefined, options);
+});
+
+const addNewLineItem = () => {
+    tableData.value = [];
+    submitted.value = false;
+    productDialog.value = true;
+};
 </script>
 
 <template>
-    <div class="grid" :style="{ 'margin-left': '-39px', 'margin-top': '-14px','margin-right': '-40px' }">
-        <div :style="{ width: '64%','margin-top':'14px' }">
+    <h5 :style="{ 'font-size': 'large', 'font-weight': 'bold', 'margin-left': '-2rem' }">New Order</h5>
+    <div class="grid" :style="{ 'margin-left': '-2rem' }">
+        <div :style="{ width: '64%', 'margin-top': '14px' }">
             <div class="card">
-                <h5 :style="{'color':'gray','font-size': 'medium','margin-left': '-10px'}">Order Details</h5>
-                <div :style="{'margin-left':'-22px'}">
+                <h5 :style="{ color: 'gray', 'font-size': 'medium', 'margin-left': '-10px' }">Order Details</h5>
+                <div :style="{ 'margin-left': '-22px' }">
                     <!-- First Row -->
-                    <div class="form-row flex flex-wrap">
-                        <div class="field col-12 md:col-4">
-                            <label for="customer" :style="{'font-weight':'bold'}">Select Customer</label>
-                            <Dropdown id="customer" v-model="selectedCustomer" :options="customers" placeholder="Select a Customer" />
+                    <div class="form-row flex flex-wrap gap-2 ml-3 mt-1">
+                        <div class="field flex-1 flex flex-column">
+                            <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Select Customer</label>
+                            <Dropdown id="customer" :style="{ borderRadius: '8px' }" v-model="selectedCustomer" :options="customerList" optionLabel="label" placeholder="Select" @change="getDropdownValue()" />
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <label for="orderDate" :style="{'font-weight':'bold'}">Order Date</label>
-                            <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Select Delivery Date"></Calendar>
+                        <div class="field flex-1 flex flex-column">
+                            <label for="orderDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Order Date</label>
+                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :manualInput="false" placeholder="Select"></Calendar>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <label for="paymentType" :style="{'font-weight':'bold'}">Payment Type</label>
-                            <Dropdown id="paymentType" v-model="selectedPaymentType" :options="paymentTypes" placeholder="Select Payment Type" />
+                        <div class="field flex-1 flex flex-column">
+                            <label for="paymentType" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Payment Type</label>
+                            <Dropdown id="paymentType" :style="{ borderRadius: '8px' }" v-model="selectedPaymentType" :options="paymentTypes" optionLabel="label" placeholder="Select" />
                         </div>
                     </div>
 
                     <!-- Second Row -->
-                    <div class="flex gap-2" :style="{'margin-top':'2px','margin-left':'15px'}">
-                        <div class="field">
-                            <label for="deliveryMethod" :style="{'font-weight':'bold'}">Delivery Location</label>
-                            <Dropdown id="deliveryMethod" v-model="selectedDeliveryMethod" :options="deliveryMethods"  class="custom-dropdown" placeholder="Select" />
+                    <div class="flex gap-2 ml-3 mt-4">
+                        <div class="field flex-1 flex flex-column">
+                            <label for="deliveryMethod" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Delivery Location</label>
+                            <Dropdown id="deliveryMethod" :style="{ borderRadius: '8px' }" v-model="selectedDeliveryLocation" :options="deliveryLocations" optionLabel="label" class="custom-dropdown" placeholder="Select" />
                             <!-- <Dropdown id="deliveryLocation" v-model="selectedDeliveryLocation" :options="deliveryLocations" placeholder="Select Delivery Location" /> -->
                         </div>
-                        <div class="field flex-1">
-                            <label for="deliveryMethod" :style="{'font-weight':'bold'}">Delivery Method</label>
-                            <Dropdown id="deliveryMethod" v-model="selectedDeliveryMethod" :options="deliveryMethods" placeholder="Select" :style="{'font-size':'11px'}" />
+                        <div class="field flex-1 flex flex-column">
+                            <label for="deliveryMethod" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Delivery Method</label>
+                            <Dropdown id="deliveryMethod" :style="{ borderRadius: '8px' }" v-model="selectedDeliveryMethod" :options="deliveryMethods" optionLabel="label" placeholder="Select" />
                         </div>
-                        <div  class="field">
-                            <label for="deliveryWindow" :style="{'font-weight':'bold'}">Delivery Window</label>
-                            <Dropdown id="deliveryWindow" v-model="selectedDeliveryWindow" :options="deliveryWindows" placeholder="Select" :style="{'font-size':'11px'}" />
+                        <div class="field flex-1 flex flex-column">
+                            <label for="deliveryWindow" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Delivery Window</label>
+                            <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }" v-model="selectedDeliveryWindow" :options="deliveryWindows" optionLabel="label" placeholder="Select" />
                         </div>
-                        <div class="field">
-                            <label for="deliveryDate" :style="{'font-weight':'bold'}">Delivery Date</label>
-                            <Calendar id="deliveryDate" v-model="deliveryDate" showIcon placeholder = "Select" :style="{'font-size':'11px'}" />
+                        <div class="field flex-1 flex flex-column">
+                            <label for="deliveryDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Delivery Date</label>
+                            <Calendar id="deliveryDate" :style="{ borderRadius: '8px' }" v-model="deliveryDate" showIcon placeholder="Select" />
                         </div>
                     </div>
 
                     <!-- Third Row -->
                     <div>
                         <div class="field col-12">
-                            <label for="orderNotes" :style="{'font-weight':'bold'}">Order Notes(Optional)</label>
+                            <label for="orderNotes" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Order Notes(Optional)</label>
                         </div>
-                        <div :style="{'margin-top':'-30px','margin-left':'15px'}">
-                            <Textarea id="orderNotes" v-model="orderNotes"  rows="4"  placeholder="Type your note here..." :style="{'width': '100%'}"></Textarea>
+                        <div :style="{ 'margin-top': '-30px', 'margin-left': '15px' }">
+                            <Textarea id="orderNotes" v-model="orderNotes" rows="4" placeholder="Type your note here..." :style="{ width: '100%' }"></Textarea>
                         </div>
                     </div>
                 </div>
@@ -112,7 +189,7 @@ const initFilters = () => {
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
-                        <div>LSG Sky Chef</div>
+                        <div>{{ selectedCustomer ? selectedCustomer.label : '-' }}</div>
                     </div>
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
@@ -132,7 +209,7 @@ const initFilters = () => {
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
-                        <div>LSG Sky Chef</div>
+                        <div>{{ selectedCustomer ? selectedCustomer.label : '-' }}</div>
                     </div>
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
@@ -177,117 +254,187 @@ const initFilters = () => {
                 </div>
             </div>
         </div>
-<div class="card" :style="{ width: '64%','margin-top': '-52%'}">
-     <DataTable
-                    ref="dt"
-                    :value="products"
-                    v-model:selection="selectedProducts"
-                    dataKey="id"
-                    :paginator="true"
-                    :rows="10"
-                    :filters="filters"
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    :rowsPerPageOptions="[5, 10, 25]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                >
-                    <template #header>
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '5px'}">
-                            <h5 style="color:#808080">Line Items</h5>
-                        </div>
-                        <div class="flex justify-content-between gap-6 mt-2">
-                            <div class="flex gap-2">
-                                <div>
-                                    <IconField iconPosition="left" class="block mt-2 md:mt-0">
-                                        <InputIcon class="pi pi-search" />
-                                        <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
-                                    </IconField>
-                                </div>
-                                
+        <div class="card" :style="{ width: '64%', 'margin-top': '-52%', height: 'auto' }">
+            <DataTable
+                ref="dt"
+                :value="products"
+                v-model:selection="selectedProducts"
+                dataKey="id"
+                :paginator="true"
+                :rows="10"
+                :filters="filters"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[5, 10, 25]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+            >
+                <template #header>
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '5px' }">
+                        <h5 style="color: #808080">Line Items</h5>
+                    </div>
+                    <div class="flex justify-content-between gap-6 mt-2">
+                        <div class="flex gap-2">
+                            <div>
+                                <IconField iconPosition="left" class="block mt-2 md:mt-0">
+                                    <InputIcon class="pi pi-search" />
+                                    <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                                </IconField>
                             </div>
-                            <div class="flex gap-2">
-                                <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF' }" @click="exportCSV($event)"></Button>
-                                <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="newOrder()"></Button>
+                        </div>
+                        <div class="flex gap-2">
+                            <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF' }" @click="exportCSV($event)"></Button>
+                            <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="addNewLineItem()"></Button>
+                        </div>
+                    </div>
+                </template>
+                <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+
+                <Column field="productId" header="Product ID" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Order No.</span>
+                        {{ slotProps.data.code }}
+                    </template>
+                </Column>
+                <Column field="item" header="Item" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Customer</span>
+                        {{ slotProps.data.name }}
+                    </template>
+                </Column>
+                <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Order Date</span>
+                        <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                    </template>
+                </Column>
+                <Column field="unit" header="Unit" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Status</span>
+                        <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                    </template>
+                </Column>
+                <Column field="stdWgt" header="Std Wgt(G)" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Items</span>
+                        {{ formatCurrency(slotProps.data.price) }}
+                    </template>
+                </Column>
+                <Column field="invEq" header="INV eq(KG)" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Amount</span>
+                        {{ slotProps.data.category }}
+                    </template>
+                </Column>
+                <Column field="processing" header="Processing" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Delivery</span>
+                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                    </template>
+                </Column>
+                <Column field="specificatios" header="specifications" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Delivery Date</span>
+                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                    </template>
+                </Column>
+                <Column field="unitCost" header="Unit Cost" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Delivery Window</span>
+                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                    </template>
+                </Column>
+                <Column field="payment" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <template #body="slotProps">
+                        <span class="p-column-title">Payment</span>
+                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                    </template>
+                </Column>
+                <Column headerStyle="min-width:10rem;">
+                    <template #body>
+                        <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
+                    </template>
+                </Column>
+            </DataTable>
+
+            <Dialog v-model:visible="productDialog" :style="{ width: '500px' }" :modal="true" class="p-fluid">
+                <template #header>
+                    <div class="dialog-header">
+                        <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
+                        <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line Item</span>
+                    </div>
+                </template>
+                <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku">
+                    <template #header>
+                        <div class="flex justify-content-between" :style="{ 'margin-top': '-10px', 'margin-left': '-10px' }">
+                            <div>
+                                <IconField iconPosition="left" class="block mt-1 md:mt-0">
+                                    <InputIcon class="pi pi-search" />
+                                    <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                                </IconField>
+                            </div>
+                            <div :style="{ 'margin-right': '-10px' }">
+                                <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }" v-model="selectedGradeFilter" :options="gradeFilters" optionLabel="label" placeholder="Filter By Grade" />
                             </div>
                         </div>
                     </template>
                     <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-                    <Column field="productId" header="Product ID" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Order No.</span>
-                            {{ slotProps.data.code }}
+                            <span class="p-column-title">SKU</span>
+                            {{ slotProps.data.sku }}
                         </template>
                     </Column>
-                    <Column field="item" header="Item" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Customer</span>
+                            <span class="p-column-title">Name</span>
                             {{ slotProps.data.name }}
                         </template>
                     </Column>
                     <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <span class="p-column-title">Grade</span>
+                            {{ slotProps.data.grade }}
                         </template>
                     </Column>
-                    <Column field="unit" header="Unit" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="available" header="Available" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Status</span>
-                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
-                        </template>
+                            <span class="p-column-title">Available</span>
+{{ slotProps.data.available }}                        </template>
                     </Column>
-                    <Column field="stdWgt" header="Std Wgt(G)" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <Column field="committed" header="Committed" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Items</span>
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
+                            <span class="p-column-title">Committed</span>
+{{ slotProps.data.committed }}                        </template>
                     </Column>
-                    <Column field="invEq" header="INV eq(KG)" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="incoming" header="Incoming" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Amount</span>
-                            {{ slotProps.data.category }}
-                        </template>
-                    </Column>
-                    <Column field="processing" header="Processing" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Delivery</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column field="specificatios" header="specifications" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Delivery Date</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column field="unitCost" header="Unit Cost" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Delivery Window</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column field="payment" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Payment</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            <span class="p-column-title">Incoming</span>
+                            <Rating :modelValue="slotProps.data.incoming" :readonly="true" :cancel="false" />
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
                         <template #body>
                             <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
+
+                            <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
                         </template>
                     </Column>
                 </DataTable>
-   
-</div>
-        
+                <div class="flex justify-content-between gap-2 ml-5">
+                    <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF' }" @click="exportCSV($event)"></Button>
+                    <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="addNewLineItem()"></Button>
+                </div>
+            </Dialog>
+        </div>
     </div>
 </template>
 <style scoped>
 /* Scoped styles to target the placeholder text in the dropdown */
 .custom-dropdown .p-dropdown-label.p-placeholder {
-
-  font-size: 12px !important; /* Adjust the font size as needed */
-  color: #e21818 !important; /* Adjust the color if needed */
+    font-size: 12px !important; /* Adjust the font size as needed */
+    color: #e21818 !important; /* Adjust the color if needed */
+}
+:deep(.rounded-dropdown .p-dropdown) {
+    border-radius: 8px !important;
 }
 </style>
