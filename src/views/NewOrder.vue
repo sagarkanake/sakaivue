@@ -62,11 +62,11 @@ const selectedProducts = ref(null);
 const orderNotes = ref(null);
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
-     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
+    { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 }
     // Add more static data as needed
 ]);
 const productService = new ProductService();
@@ -75,7 +75,7 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(() => {
-    productService.getProducts().then((data) => (products.value = data));
+    //  productService.getProducts().then((data) => (products.value = data));
 });
 
 const initFilters = () => {
@@ -99,6 +99,10 @@ const addNewLineItem = () => {
     submitted.value = false;
     productDialog.value = true;
 };
+
+const addLineItem = () => {
+
+}
 </script>
 
 <template>
@@ -258,7 +262,7 @@ const addNewLineItem = () => {
         <div class="card" :style="{ width: '64%', 'margin-top': '-52%', height: 'auto' }">
             <DataTable
                 ref="dt"
-                :value="tableData"
+                :value="products"
                 v-model:selection="selectedProducts"
                 dataKey="id"
                 :paginator="true"
@@ -356,75 +360,72 @@ const addNewLineItem = () => {
                 </Column>
             </DataTable>
 
-            <Dialog v-model:visible="productDialog" :style="{ width: '500px' }" :modal="true" class="p-fluid">
+            <Dialog v-model:visible="productDialog" :style="{ width: '650px',height: '430px' }" :modal="true" class="p-fluid">
                 <template #header>
                     <div class="dialog-header">
                         <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
                         <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line Item</span>
                     </div>
                 </template>
-                <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku">
-                    <template #header>
-                        <div class="flex justify-content-between" :style="{ 'margin-top': '-10px', 'margin-left': '-10px' }">
-                            <div>
-                                <IconField iconPosition="left" class="block mt-1 md:mt-0">
-                                    <InputIcon class="pi pi-search" />
-                                    <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
-                                </IconField>
+                <div class="card">
+                    <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{'margin-left': '-20px'}">
+                        <template #header>
+                            <div class="flex justify-content-between" :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
+                                <div>
+                                    <IconField iconPosition="left" class="block mt-1 md:mt-0">
+                                        <InputIcon class="pi pi-search" />
+                                        <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                                    </IconField>
+                                </div>
+                                <div :style="{ 'margin-right': '-17px' }">
+                                    <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }" v-model="selectedGradeFilter" :options="gradeFilters" optionLabel="label" placeholder="Filter By Grade" />
+                                </div>
                             </div>
-                            <div :style="{ 'margin-right': '-10px' }">
-                                <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }" v-model="selectedGradeFilter" :options="gradeFilters" optionLabel="label" placeholder="Filter By Grade" />
-                            </div>
-                        </div>
-                    </template>
-                    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+                        </template>
+                        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
-                    <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">SKU</span>
-                            {{ slotProps.data.sku }}
-                        </template>
-                    </Column>
-                    <Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Name</span>
-                            {{ slotProps.data.name }}
-                        </template>
-                    </Column>
-                    <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Grade</span>
-                            {{ slotProps.data.grade }}
-                        </template>
-                    </Column>
-                    <Column field="available" header="Available" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Available</span>
-{{ slotProps.data.available }}                        </template>
-                    </Column>
-                    <Column field="committed" header="Committed" :sortable="true" headerStyle="width:14%; min-width:8rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Committed</span>
-{{ slotProps.data.committed }}                        </template>
-                    </Column>
-                    <Column field="incoming" header="Incoming" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Incoming</span>
-                            <Rating :modelValue="slotProps.data.incoming" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column headerStyle="min-width:10rem;">
-                        <template #body>
-                            <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
-
-                            <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-                <div class="flex justify-content-between gap-2 ml-5">
-                    <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF' }" @click="exportCSV($event)"></Button>
-                    <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="addNewLineItem()"></Button>
+                        <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">SKU</span>
+                                {{ slotProps.data.sku }}
+                            </template>
+                        </Column>
+                        <Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">Name</span>
+                                {{ slotProps.data.name }}
+                            </template>
+                        </Column>
+                        <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">Grade</span>
+                                {{ slotProps.data.grade }}
+                            </template>
+                        </Column>
+                        <Column field="available" header="Available" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">Available</span>
+                                {{ slotProps.data.available }}
+                            </template>
+                        </Column>
+                        <Column field="committed" header="Committed" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">Committed</span>
+                                {{ slotProps.data.committed }}
+                            </template>
+                        </Column>
+                        <Column field="incoming" header="Incoming" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                            <template #body="slotProps">
+                                <span class="p-column-title">Incoming</span>
+                                {{ slotProps.data.committed }}
+                            </template>
+                        </Column>
+                    </DataTable>
                 </div>
+                 <div class="flex justify-content-end gap-2 ml-5">
+                        <Button type="button" label="Remove" icon="pi pi-trash" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' }" @click="exportCSV($event)"></Button>
+                        <Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '100px' }" @click="addNewLineItem()"></Button>
+                    </div>
             </Dialog>
         </div>
     </div>

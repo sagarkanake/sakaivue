@@ -41,6 +41,7 @@ const getBadgeSeverity = (inventoryStatus) => {
 onBeforeMount(() => {
     initFilters();
 });
+
 onMounted(() => {
     productService.getProducts().then((data) => (products.value = data));
 });
