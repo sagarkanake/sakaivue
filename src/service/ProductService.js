@@ -28,4 +28,10 @@ export class ProductService {
             .then((res) => res.json())
             .then((d) => d.data);
     }
+
+    getLineItems() {
+        return fetch('/demo/data/line-items.json', { headers: { 'Cache-Control': 'no-cache' } })
+            .then((res) => res.json())
+            .then((d) => d.data);
+    }
 }

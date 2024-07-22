@@ -58,7 +58,7 @@ const products = ref(null);
 const product = ref({});
 const submitted = ref(false);
 const selectedGradeFilter = ref(null);
-const selectedProducts = ref([]);
+const selectedProducts = ref(null);
 const orderNotes = ref(null);
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
@@ -69,12 +69,13 @@ const tableData = ref([
      { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
     // Add more static data as needed
 ]);
+const productService = new ProductService();
+
 onBeforeMount(() => {
     initFilters();
 });
 onMounted(() => {
-    console.log("Table Data ", tableData);
-    //  ProductService.getProducts().then((data) => (products.value = data));
+    productService.getProducts().then((data) => (products.value = data));
 });
 
 const initFilters = () => {
@@ -94,7 +95,7 @@ const formattedDate = computed(() => {
 });
 
 const addNewLineItem = () => {
-    tableData.value = [];
+    product.value = [];
     submitted.value = false;
     productDialog.value = true;
 };
@@ -257,7 +258,7 @@ const addNewLineItem = () => {
         <div class="card" :style="{ width: '64%', 'margin-top': '-52%', height: 'auto' }">
             <DataTable
                 ref="dt"
-                :value="products"
+                :value="tableData"
                 v-model:selection="selectedProducts"
                 dataKey="id"
                 :paginator="true"
