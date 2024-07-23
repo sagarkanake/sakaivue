@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 
 const toast = useToast();
 
-const router = useRouter()
+const router = useRouter();
 const products = ref(null);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
@@ -71,7 +71,7 @@ const clearFilter = () => {
     calenderValue.value = '';
     status.value = '';
     filters['global'].value = '';
-}
+};
 const saveProduct = () => {
     submitted.value = true;
     if (product.value.name && product.value.name.trim() && product.value.price) {
@@ -130,10 +130,7 @@ const createId = () => {
 };
 
 const newOrder = () => {
-
-router.push('/sales/orders/neworders');
-
-
+    router.push({ path: '/sales/orders/new-orders' });
 };
 
 const exportCSV = () => {
@@ -159,7 +156,8 @@ const initFilters = () => {
 
 <template>
     <div class="grid" :style="{ 'margin-left': '-50px', 'margin-top': '-30px' }">
-        <div class="col-12 lg:col-3 xl:col-3">
+               
+               <div class="col-12 lg:col-3 xl:col-3">
             <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
                 <div class="flex justify-content-between mb-2 ml-2 mt-2">
                     <div>
@@ -420,12 +418,14 @@ const initFilters = () => {
                 </Dialog>
 
                 <Dialog v-model:visible="filterDialog" :style="{ width: '350px' }" :modal="true" class="p-fluid">
-                 <template #header>
-    <div class="p-d-flex p-ai-center">
-        <span class="pi pi-filter p-mr-1" style="color: darkgreen;font-weight:700"></span> <!-- PrimeIcons class for the filter icon with custom color -->
-        <span class="p-ml-n6" style="color: darkgreen;font-weight:700;font-size:larger"> More Filters</span> <!-- PrimeFlex classes for margin-left and bold text -->
-    </div>
-</template>
+                    <template #header>
+                        <div class="p-d-flex p-ai-center">
+                            <span class="pi pi-filter p-mr-1" style="color: darkgreen; font-weight: 700"></span>
+                            <!-- PrimeIcons class for the filter icon with custom color -->
+                            <span class="p-ml-n6" style="color: darkgreen; font-weight: 700; font-size: larger"> More Filters</span>
+                            <!-- PrimeFlex classes for margin-left and bold text -->
+                        </div>
+                    </template>
 
                     <div class="field">
                         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Payment Status">
@@ -443,7 +443,7 @@ const initFilters = () => {
                         </Dropdown>
                     </div>
 
-                     <div class="field">
+                    <div class="field">
                         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Customer">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
@@ -457,11 +457,11 @@ const initFilters = () => {
                                 </span>
                             </template>
                         </Dropdown>
-                     </div>
-                        <div class="field">
-                                    <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Select Delivery Date"></Calendar>
-                        </div>
-                        <div class="field">
+                    </div>
+                    <div class="field">
+                        <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Select Delivery Date"></Calendar>
+                    </div>
+                    <div class="field">
                         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Delivery Window">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
@@ -477,11 +477,12 @@ const initFilters = () => {
                         </Dropdown>
                     </div>
                     <template #footer>
-                        <Button type = "button" label="Cancel" icon="pi pi-times"  :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
-                        <Button type = "button" label="Save" icon="pi pi-check"  :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
+                        <Button type="button" label="Cancel" icon="pi pi-times" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
+                        <Button type="button" label="Save" icon="pi pi-check" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
                     </template>
                 </Dialog>
             </div>
         </div>
+
     </div>
 </template>

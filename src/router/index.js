@@ -12,26 +12,25 @@ const routes = [
         component: () => import('@/views/Dashboard.vue')
       },
       {
-        path: '/sales',
+        path: 'sales',
         meta: { breadcrumb: 'Sales' },
         children: [
           {
-            path: '/orders',
+            path: 'orders',
             name: 'sales-orders',
             component: () => import('@/views/SalesOrders.vue'),
             meta: { breadcrumb: 'Orders' },
             children : [
               {
-                path: 'neworders',
+                path: 'new-orders',
                 name: 'NewOrders',
-                // component: () => import('@/views/NewOrder.vue'),
-                component: () => import('@/views/Invoices.vue'),
+                component: () => import('@/views/NewOrder.vue'),
                 meta: { breadcrumb: 'New Order' }
               },
             ]
           },
           // {
-          //   path: 'orders/neworders',
+          //   path: 'orders/new-orders',
           //   name: 'NewOrders',
           //   component: () => import('@/views/NewOrder.vue'),
           //   meta: { breadcrumb: 'New Order' }
