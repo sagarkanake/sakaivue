@@ -325,44 +325,44 @@ const initFilters = () => {
                 <Dialog v-model:visible="addFlashSale" :style="{ width: '450px' }" :modal="true" class="p-fluid">
                     <template #header>
                         <div class="p-d-flex p-ai-center">
-                            <span class="pi pi-filter p-mr-1" style="color: darkgreen; font-weight: 700"></span>
+                            <span class="pi pi-plus p-mr-1" style="color: darkgreen; font-weight: 700"></span>
                             <!-- PrimeIcons class for the filter icon with custom color -->
-                            <span class="p-ml-n6" style="color: darkgreen; font-weight: 700; font-size: larger">Add Flash Sale</span>
+                            <span class="p-ml-n6 ml-2" style="color: darkgreen; font-weight: 700; font-size: larger">Add Flash Sale</span>
                             <!-- PrimeFlex classes for margin-left and bold text -->
                         </div>
                     </template>
                     <div class="field">
-                        <label for="name">Product</label>
+                        <label for="name" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Product</label>
                         <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Product"></Dropdown>
                     </div>
                     <div class="flex justify-content-between">
                         <div>
-                            <label for="name">Unit</label>
+                            <label for="name" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Unit</label>
                             <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Unit"></Dropdown>
                         </div>
                         <div>
-                            <label for="description">Quantity</label>
+                            <label for="description" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Quantity</label>
                             <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" />
                         </div>
                     </div>
-                    <div class="flex justify-content-between">
+                    <div class="flex justify-content-between mt-3 gap-2">
                         <div>
                             <label for="orderDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Start Date</label>
-                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :manualInput="false" placeholder="Select"></Calendar>
+                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :showIcon="true" :manualInput="false" placeholder="DD/MM/YYYY"></Calendar>
                         </div>
                         <div>
                             <label for="orderDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">End Date</label>
-                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :manualInput="false" placeholder="Select"></Calendar>
+                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :showIcon="true" :manualInput="false" placeholder="DD/MM/YYYY"></Calendar>
                         </div>
                     </div>
-                    <div class="field">
-                        <label for="description">Flash Sale Price</label>
-                            <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" />
+                    <div class="mt-3">
+                        <label for="description" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Flash Sale Price</label>
+                        <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" default= 0 />
                     </div>
 
                     <template #footer>
-                        <Button label="Cancel" icon="pi pi-times" text="" @click="hideDialog" />
-                        <Button label="Save" icon="pi pi-check" text="" @click="saveProduct" />
+                        <Button type="button" label="Cancel" icon="pi pi-times" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog()"></Button>
+                        <Button type="button" label="Save" icon="pi pi-check" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct()"></Button>
                     </template>
                 </Dialog>
 

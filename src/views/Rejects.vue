@@ -236,7 +236,7 @@ const initFilters = () => {
                                     </IconField>
                                 </div>
                                 <div>
-                                    <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Calendar"></Calendar>
+                                    <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Calendar" ></Calendar>
                                 </div>
                                 <div>
                                     <!-- <label for="state">Status</label> -->
