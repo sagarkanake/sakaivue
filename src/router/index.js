@@ -23,6 +23,12 @@ const router = createRouter({
                             component: () => import('@/views/SalesOrders.vue'),
                             meta: { breadcrumb: 'Orders' }
                         },
+                        {
+                            path: 'invoices',
+                            name: 'invoices',
+                            component: () => import('@/views/Invoices.vue'),
+                            meta: { breadcrumb: 'Invoices' }
+                        },
                         // Add more Sales child routes here
                     ]
                 },
@@ -167,6 +173,14 @@ const router = createRouter({
                     component: () => import('@/views/NewOrder.vue'),
                     meta: {
                         breadcrumb: 'New Order'
+                      }
+                },
+                {
+                    path: '/invoices',
+                    name: 'invoices',
+                    component: () => import('@/views/Invoices.vue'),
+                    meta: {
+                        breadcrumb: 'Invoices'
                       }
                 },
                 

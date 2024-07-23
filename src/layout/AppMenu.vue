@@ -7,10 +7,10 @@ const model = ref([
 {
      items: [
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
-            { label: 'Sales',
+            { label: 'Sales',icon: 'pi pi-shopping-bag',
         items: [
-            { label: 'Orders', icon: 'pi pi-fw pi-prime', to: '/salesOrder' },
-            { label: 'Invoices', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Orders', icon: 'pi pi-circle-fill', to: '/salesOrder' },
+            { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/invoices'},
             { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
@@ -57,4 +57,9 @@ const model = ref([
     </ul>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.large-icon .pi {
+  font-size: 24px;
+}
+</style>

@@ -109,9 +109,9 @@ const addLineItem = () => {
 </script>
 
 <template>
-<div class="flex gap-6">
+<div class="flex justify-content-between">
     <h5 :style="{ 'font-size': 'large', 'font-weight': 'bold', 'margin-left': '-2rem' }">New Order</h5>
-    <div :style="{'margin-left': '30px'}"><Button type="button" label="Add" icon="pi pi-plus" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="addNewLineItem()"></Button></div>
+    <div :style="{'margin-left': '30px'}"><Button type="button" label="Save Order" icon="pi pi-save" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }"></Button></div>
 
 </div>
     
