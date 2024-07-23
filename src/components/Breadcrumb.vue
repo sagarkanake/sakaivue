@@ -1,63 +1,66 @@
-<!-- Breadcrumb.vue -->
 <template>
-  <nav aria-label="breadcrumb" class="breadcrumb-nav">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li v-for="(breadcrumb, index) in breadcrumbs" :key="index" class="breadcrumb-item">
-        <router-link v-if="breadcrumb.path" :to="breadcrumb.path">{{ breadcrumb.meta.breadcrumb }}</router-link>
-        <span v-else>{{ breadcrumb.meta.breadcrumb }}</span>
-        <!-- Add the ">" separator if it's not the last breadcrumb item -->
-        <span v-if="index < breadcrumbs.length - 1"> > </span>
+              <i class="pi pi-box pr-2"></i>
+
+      <li v-for="(crumb, index) in breadcrumbs" :key="index" class="breadcrumb-item" :class="{ 'active': index === breadcrumbs.length - 1 }">
+        <router-link v-if="index !== breadcrumbs.length - 1" :to="crumb.path">{{ crumb.meta.breadcrumb }}</router-link>
+        <span v-else>{{ crumb.meta.breadcrumb }}</span>
       </li>
     </ol>
   </nav>
 </template>
 
-<script>
-export default {
-  computed: {
-    breadcrumbs() {
-      let breadcrumbs = [];
-      let matched = this.$route.matched;
-      console.log("matched ", matched);
-      matched.forEach((route) => {
-        if (route.meta && route.meta.breadcrumb) {
-          breadcrumbs.push({
-            path: route.path,
-            meta: route.meta
-          });
-        }
-      });
-console.log("bread crumbs ", breadcrumbs);
-      return breadcrumbs;
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const breadcrumbs = computed(() => {
+  const pathArray = route.path.split('/').filter(p => p);
+  const breadcrumbArray = [];
+  
+  pathArray.reduce((prev, curr) => {
+    const path = `${prev}/${curr}`;
+    const routeMatch = route.matched.find(r => r.path === path);
+    if (routeMatch && routeMatch.meta.breadcrumb) {
+      breadcrumbArray.push({ path, meta: routeMatch.meta });
     }
-  }
-};
+    return path;
+  }, '');
+
+  return breadcrumbArray;
+});
 </script>
 
 <style scoped>
-.breadcrumb-nav {
-    margin-left: 80px;
-  /* background-color: #f8f9fa; */
-  padding: 0.75rem 1rem;
-}
-
 .breadcrumb {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  margin-left: 70px;
 }
 
 .breadcrumb-item {
-  margin-right: 5px;
+  display: inline-block;
 }
 
-.breadcrumb-item::after {
-  content: '/';
-  margin-left: 5px;
+.breadcrumb-item + .breadcrumb-item::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  /* color: #6c757d; */
+  content: ">";
 }
 
-.breadcrumb-item:last-child::after {
-  content: '';
+.breadcrumb-item > router-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.breadcrumb-item > router-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active > span {
+  color: #6c757d;
 }
 </style>
