@@ -4,6 +4,7 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import { ProductService } from '@/service/ProductService';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
+
 const toast = useToast();
 
 const router = useRouter()
@@ -129,7 +130,10 @@ const createId = () => {
 };
 
 const newOrder = () => {
-    router.push('/sales/orders/newOrder');
+
+router.push('/sales/orders/neworders');
+
+
 };
 
 const exportCSV = () => {

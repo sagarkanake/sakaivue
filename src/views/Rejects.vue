@@ -17,14 +17,16 @@ const selectedProducts = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
-const statuses = ref([
-    { label: 'paid', value: 'Paid' },
-    { label: 'pending', value: 'Pending' },
-    { label: 'unpaid', value: 'Unpaid' }
+const returnsActions = ref([
+    { label: 'replaced', value: 'Replaced' },
+    { label: 'inventory', value: 'Inventory' },
+    { label: 'waste', value: 'Waste' }
 ]);
 const status = ref(null);
 const productService = new ProductService();
 let calenderValue = ref(null);
+const visibleRight = ref(false);
+
 const getBadgeSeverity = (inventoryStatus) => {
     switch (inventoryStatus.toLowerCase()) {
         case 'instock':
@@ -223,7 +225,7 @@ const initFilters = () => {
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
-                            <h5 class="m-0">Invoices</h5>
+                            <h5 class="m-0">Rejects</h5>
                         </div>
                         <div class="flex justify-content-between gap-6 mt-2" :style="{ 'margin-left': '-15px' }">
                             <div class="flex gap-2">
@@ -238,13 +240,7 @@ const initFilters = () => {
                                 </div>
                                 <div>
                                     <!-- <label for="state">Status</label> -->
-                                    <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Status"></Dropdown>
-                                </div>
-                                <div>
-                                    <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined @click="openFilter()" />
-                                </div>
-                                <div>
-                                    <Button type="button" icon="pi pi-filter-slash" outlined @click="clearFilter()" />
+                                    <Dropdown id="state" v-model="status" :options="returnsActions" optionLabel="value" placeholder="Select Action"></Dropdown>
                                 </div>
                             </div>
 
@@ -254,13 +250,15 @@ const initFilters = () => {
                         </div>
                     </template>
 
-                    <Column field="issueDate" header="Issue Date" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="orderNo" header="Order No." headerStyle="width:14%; min-width:10rem;" @click="openSidebar()">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
-                            {{ slotProps.data.code }}
+                            <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
+            {{ slotProps.data.code }}
+          </button>
                         </template>
                     </Column>
-                    <Column field="invoiceNo" header="Invoice No."  headerStyle="width:14%; min-width:10rem;">
+                    <Column field="deliveryDate" header="Delivery Date"  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
                             {{ slotProps.data.name }}
@@ -272,42 +270,19 @@ const initFilters = () => {
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="dueDate" header="Due Date"  headerStyle="width:14%; min-width:10rem;">
+                    <Column field="rejectionReason" header="Rejection Reaon"  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
                             <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
-                    <Column field="paid" header="Paid"  headerStyle="width:14%; min-width:8rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Items</span>
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
-                    </Column>
-                    <Column field="amount" header="Amount"  headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Amount</span>
-                            {{ slotProps.data.category }}
-                        </template>
-                    </Column>
-                    <Column field="paymentType" header="Payment Type"  headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Delivery</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column field="status" header="Status" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="action" header="Action" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
                             <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
-                    <Column field="deliveryWindow" header="Download"  headerStyle="width:14%; min-width:10rem;">
-                        <template #body>
-                            <span class="p-column-title">Delivery Window</span>
-                            <Button icon="pi pi-download" type="button" class="p-button-text"></Button>
-                        </template>
-                    </Column>
+
                     <!-- <Column headerStyle="min-width:10rem;">
                         <template #body>
                             <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
@@ -462,4 +437,80 @@ const initFilters = () => {
             </div>
         </div>
     </div>
+    <div class="card">
+
+
+                <Sidebar v-model:visible="visibleRight" :baseZIndex="1000" position="right" :style="{ width: '400px' }">
+                    <h5 style="font-weight: normal">CO-2024-04-2669</h5>
+                    <div :style="{ 'margin-top': '-5px' }">
+                <h5>Rejection Details</h5>
+                <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Delivery Date</div>
+                        <div>22/06/24</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
+                        <div>John Kamau</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Order No. </div>
+                        <div>CO-2024-04-2669</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Rejection Reason</div>
+                        <div>Over ripe</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Receiver</div>
+                        <div>Jon Kamau</div>
+                    </div>
+                </div>
+                <div :style="{ 'border-top': '2px solid #F6F6F6', 'margin-top': '20px' }"></div>
+                <h5>Order Items</h5>
+            <div>
+                <DataTable
+                    ref="dt"
+                    :value="products"
+                    v-model:selection="selectedProducts"
+                    dataKey="id"
+                    :scrollable="true" scrollHeight="300px"
+                >
+                    <Column field="sku" header="SKU" sortable = "true" headerStyle="width:14%; min-width:10rem;" @click="openSidebar()">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Order No.</span>
+                            <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
+            {{ slotProps.data.code }}
+          </button>
+                        </template>
+                    </Column>
+                    <Column field="name" header="Name" sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Customer</span>
+                            {{ slotProps.data.name }}
+                        </template>
+                    </Column>
+                    <Column field="grade" header="Grade" sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Order Date</span>
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                        </template>
+                    </Column>
+                    <Column field="unit" header="Unit"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Status</span>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                        </template>
+                    </Column>
+                    <Column field="quantity" header="Quantity"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Status</span>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
+            </div>
+                </Sidebar>
+            </div>
 </template>

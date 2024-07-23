@@ -7,28 +7,35 @@ const routes = [
     component: AppLayout,
     children: [
       {
-        path: '/',
+        path: '',
         name: 'dashboard',
         component: () => import('@/views/Dashboard.vue')
       },
       {
-        path: 'sales',
+        path: '/sales',
         meta: { breadcrumb: 'Sales' },
         children: [
           {
-            path: 'orders',
+            path: '/orders',
             name: 'sales-orders',
             component: () => import('@/views/SalesOrders.vue'),
             meta: { breadcrumb: 'Orders' },
             children : [
-                {
-                    path: 'newOrder',
-                    name: 'newOrder',
-                    component: () => import('@/views/NewOrder.vue'),
-                    meta: { breadcrumb: 'New Order' }
-                  },
+              {
+                path: 'neworders',
+                name: 'NewOrders',
+                // component: () => import('@/views/NewOrder.vue'),
+                component: () => import('@/views/Invoices.vue'),
+                meta: { breadcrumb: 'New Order' }
+              },
             ]
           },
+          // {
+          //   path: 'orders/neworders',
+          //   name: 'NewOrders',
+          //   component: () => import('@/views/NewOrder.vue'),
+          //   meta: { breadcrumb: 'New Order' }
+          // },
           {
             path: 'invoices',
             name: 'sales-invoices',
