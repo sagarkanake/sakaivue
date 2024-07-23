@@ -18,7 +18,7 @@ export default {
     breadcrumbs() {
       let breadcrumbs = [];
       let matched = this.$route.matched;
-
+      console.log("matched ", matched);
       matched.forEach((route) => {
         if (route.meta && route.meta.breadcrumb) {
           breadcrumbs.push({
@@ -27,7 +27,7 @@ export default {
           });
         }
       });
-
+console.log("bread crumbs ", breadcrumbs);
       return breadcrumbs;
     }
   }

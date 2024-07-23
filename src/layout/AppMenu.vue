@@ -9,9 +9,9 @@ const model = ref([
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
             { label: 'Sales',icon: 'pi pi-shopping-bag',
         items: [
-            { label: 'Orders', icon: 'pi pi-circle-fill',style : "font-size: 1rem", to: '/salesOrder' },
-            { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/invoices'},
-            { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Orders', icon: 'pi pi-circle-fill',style : "font-size: 1rem", to: '/sales/orders' },
+            { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/sales/invoices'},
+            { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/sales/rejects' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
             { label: 'Customers', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
