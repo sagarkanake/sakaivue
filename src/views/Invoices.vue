@@ -6,7 +6,7 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 const toast = useToast();
 
-const router = useRouter()
+const router = useRouter();
 const products = ref(null);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
@@ -70,7 +70,7 @@ const clearFilter = () => {
     calenderValue.value = '';
     status.value = '';
     filters['global'].value = '';
-}
+};
 const saveProduct = () => {
     submitted.value = true;
     if (product.value.name && product.value.name.trim() && product.value.price) {
@@ -172,7 +172,7 @@ const initFilters = () => {
             <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
                 <div class="flex justify-content-between mb-2 ml-2 mt-2">
                     <div>
-                        <span class="block text-500 font-medium mb-1">All Orders</span>
+                        <span class="block text-500 font-medium mb-1">In Progress</span>
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@ const initFilters = () => {
             <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
                 <div class="flex justify-content-between mb-2 ml-2 mt-2">
                     <div>
-                        <span class="block text-500 font-medium mb-1">Customers</span>
+                        <span class="block text-500 font-medium mb-1">Completed</span>
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@ const initFilters = () => {
             <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
                 <div class="flex justify-content-between mb-2 ml-2 mt-2">
                     <div>
-                        <span class="block text-500 font-medium mb-1">Comments</span>
+                        <span class="block text-500 font-medium mb-1">Cancelled</span>
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
@@ -254,71 +254,65 @@ const initFilters = () => {
                         </div>
                     </template>
 
-                    <Column field="orderNo" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="issueDate" header="Issue Date" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
                             {{ slotProps.data.code }}
                         </template>
                     </Column>
-                    <Column field="customer" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="invoiceNo" header="Invoice No."  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
                             {{ slotProps.data.name }}
                         </template>
                     </Column>
-                    <Column field="orderDate" header="Order Date" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="customer" header="Customer" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="inventoryStatus" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="dueDate" header="Due Date"  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
                             <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
-                    <Column field="items" header="Items" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <Column field="paid" header="Paid"  headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Items</span>
                             {{ formatCurrency(slotProps.data.price) }}
                         </template>
                     </Column>
-                    <Column field="amount" header="Amount" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="amount" header="Amount"  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Amount</span>
                             {{ slotProps.data.category }}
                         </template>
                     </Column>
-                    <Column field="delivery" header="Delivery" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="paymentType" header="Payment Type"  headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery</span>
                             <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
                         </template>
                     </Column>
-                    <Column field="deliveryDate" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="status" header="Status" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Delivery Date</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            <span class="p-column-title">Status</span>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
-                    <Column field="deliveryWindow" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
+                    <Column field="deliveryWindow" header="Download"  headerStyle="width:14%; min-width:10rem;">
+                        <template #body>
                             <span class="p-column-title">Delivery Window</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            <Button icon="pi pi-download" type="button" class="p-button-text"></Button>
                         </template>
                     </Column>
-                    <Column field="payment" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Payment</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-                    <Column headerStyle="min-width:10rem;">
+                    <!-- <Column headerStyle="min-width:10rem;">
                         <template #body>
                             <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
                         </template>
-                    </Column>
+                    </Column> -->
                 </DataTable>
 
                 <Dialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
@@ -415,20 +409,22 @@ const initFilters = () => {
                 </Dialog>
 
                 <Dialog v-model:visible="filterDialog" :style="{ width: '350px' }" :modal="true" class="p-fluid">
-                 <template #header>
-    <div class="p-d-flex p-ai-center">
-        <span class="pi pi-filter p-mr-1" style="color: darkgreen;font-weight:700"></span> <!-- PrimeIcons class for the filter icon with custom color -->
-        <span class="p-ml-n6" style="color: darkgreen;font-weight:700;font-size:larger"> More Filters</span> <!-- PrimeFlex classes for margin-left and bold text -->
-    </div>
-</template>
+                    <template #header>
+                        <div class="p-d-flex p-ai-center">
+                            <span class="pi pi-filter p-mr-1" style="color: darkgreen; font-weight: 700"></span>
+                            <!-- PrimeIcons class for the filter icon with custom color -->
+                            <span class="p-ml-n6" style="color: darkgreen; font-weight: 700; font-size: larger"> More Filters</span>
+                            <!-- PrimeFlex classes for margin-left and bold text -->
+                        </div>
+                    </template>
 
-<div class="field">
-                                    <Calendar v-model="calenderValue"  :manualInput="false" placeholder="Select Issued Date"></Calendar>
-                        </div>
-                        <div class="field">
-                                    <Calendar v-model="calenderValue"  :manualInput="false" placeholder="Select Due Date"></Calendar>
-                        </div>
-                     <div class="field">
+                    <div class="field">
+                        <Calendar v-model="calenderValue" :manualInput="false" placeholder="Select Issued Date"></Calendar>
+                    </div>
+                    <div class="field">
+                        <Calendar v-model="calenderValue" :manualInput="false" placeholder="Select Due Date"></Calendar>
+                    </div>
+                    <div class="field">
                         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Customer">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
@@ -442,8 +438,8 @@ const initFilters = () => {
                                 </span>
                             </template>
                         </Dropdown>
-                     </div>
-                        <div class="field">
+                    </div>
+                    <div class="field">
                         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Payment Type">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
@@ -459,8 +455,8 @@ const initFilters = () => {
                         </Dropdown>
                     </div>
                     <template #footer>
-                        <Button type = "button" label="Cancel" icon="pi pi-times"  :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
-                        <Button type = "button" label="Apply" icon="pi pi-check"  :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
+                        <Button type="button" label="Cancel" icon="pi pi-times" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
+                        <Button type="button" label="Apply" icon="pi pi-check" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
                     </template>
                 </Dialog>
             </div>

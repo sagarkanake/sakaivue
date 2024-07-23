@@ -9,7 +9,7 @@ const model = ref([
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
             { label: 'Sales',icon: 'pi pi-shopping-bag',
         items: [
-            { label: 'Orders', icon: 'pi pi-circle-fill', to: '/salesOrder' },
+            { label: 'Orders', icon: 'pi pi-circle-fill',style : "font-size: 1rem", to: '/salesOrder' },
             { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/invoices'},
             { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
@@ -22,7 +22,7 @@ const model = ref([
         ] },
          { label: 'Inventory',
         items: [
-            { label: 'Products', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Products', icon: 'pi pi-fw pi-prime', style:"font-size: 1rem", to: '/uikit/table' },
             { label: 'Pricing', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Customer Pricing', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
             { label: 'Real Time Inventory', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
