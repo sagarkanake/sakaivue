@@ -29,12 +29,6 @@ const routes = [
               },
             ]
           },
-          // {
-          //   path: 'orders/new-orders',
-          //   name: 'NewOrders',
-          //   component: () => import('@/views/NewOrder.vue'),
-          //   meta: { breadcrumb: 'New Order' }
-          // },
           {
             path: 'invoices',
             name: 'sales-invoices',
@@ -46,7 +40,14 @@ const routes = [
             name: 'sales-rejects',
             component: () => import('@/views/Rejects.vue'),
             meta: { breadcrumb: 'Rejects' }
+          },
+          {
+            path: 'flash-sales',
+            name: 'flash-sales',
+            component: () => import('@/views/FlashSales.vue'),
+            meta: { breadcrumb: 'Flash Sales' }
           }
+          
           // Add more Sales child routes here
         ]
       },
