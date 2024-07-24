@@ -30,7 +30,7 @@ let calenderValue = ref(null);
 const editFlashSaleDialog = ref(false);
 const items = ref([
     { label: 'Edit', icon: 'pi pi-fw pi-plus', command: () => handleMenuAction('Edit') },
-    { label: 'Delete Flash Sale', icon: 'pi pi-fw pi-trash', command: () => handleMenuAction('Delete'), class: 'delete-menu-item' }
+    { label: 'Delete Flash Sale', icon: 'pi pi-fw pi-trash', command: () => handleMenuAction('Delete'), style:{'color': 'red' }}
 ]);
 
 const getBadgeSeverity = (inventoryStatus) => {
@@ -267,7 +267,7 @@ const deleteFlashSale = () => {
                             </div>
 
                             <div class="flex gap-2" :style="{ 'margin-right': '-22px' }">
-                                <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="exportCSV($event)"></Button>
+                                <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' ,color:'#122C20'}" @click="exportCSV($event)"></Button>
                                 <Button type="button" label="New Flash Sale" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="openAddNewFlashSale()"></Button>
                             </div>
                         </div>
@@ -512,11 +512,15 @@ const deleteFlashSale = () => {
         </div>
     </div>
 </template>
-<style scoped>
-/* Custom styles for the Delete menu item */
-.delete-menu-item {
-    color: red; /* Example style */
-    font-weight: bold; /* Example style */
+<style lang="scss" scoped>
+/* Apply styles using the deep selector */
+::v-deep .p-menuitem .p-menuitem-text[data-pc-section="label"] {
+    color: red !important; /* Example: change text color to red */
+    font-weight: bold; /* Example: make text bold */
+}
+.custom-delete-menu-item {
+    color: red !important;
 }
 </style>
+
 
