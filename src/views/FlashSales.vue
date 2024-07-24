@@ -27,6 +27,12 @@ const status = ref(null);
 const productService = new ProductService();
 const addFlashSale = ref(false);
 let calenderValue = ref(null);
+const editFlashSaleDialog = ref(false);
+const items = ref([
+    { label: 'Edit', icon: 'pi pi-fw pi-plus', command: () => handleMenuAction('Edit') },
+    { label: 'Delete Flash Sale', icon: 'pi pi-fw pi-trash', command: () => handleMenuAction('Delete'), class: 'delete-menu-item' }
+]);
+
 const getBadgeSeverity = (inventoryStatus) => {
     switch (inventoryStatus.toLowerCase()) {
         case 'instock':
@@ -58,7 +64,7 @@ const openNew = () => {
 };
 
 const hideDialog = () => {
-    productDialog.value = false;
+    deleteProductDialog.value = false;
     submitted.value = false;
 };
 
@@ -157,6 +163,18 @@ const initFilters = () => {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
     };
 };
+
+const handleMenuAction = (action, item) => {
+    if (action === 'Edit') {
+        editFlashSaleDialog.value = true;
+    } else if (action === 'Delete') {
+        deleteProductDialog.value = true;
+    }
+};
+
+const deleteFlashSale = () => {
+    deleteProductDialog.value = false;
+}
 </script>
 
 <template>
@@ -316,8 +334,9 @@ const initFilters = () => {
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
-                        <template #body>
-                            <Button icon="pi pi-ellipsis-v" type="button" class="p-button-text"></Button>
+                        <template #body="slotProps">
+                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded" @click="$refs.menu2.toggle($event)"></Button>
+                            <Menu ref="menu2" :popup="true" :model="items" @click="handleMenuAction($event, slotProps)"></Menu>
                         </template>
                     </Column>
                 </DataTable>
@@ -357,7 +376,7 @@ const initFilters = () => {
                     </div>
                     <div class="mt-3">
                         <label for="description" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Flash Sale Price</label>
-                        <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" default= 0 />
+                        <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" default="0" />
                     </div>
 
                     <template #footer>
@@ -366,28 +385,62 @@ const initFilters = () => {
                     </template>
                 </Dialog>
 
-                <Dialog v-model:visible="deleteProductDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
-                    <div class="flex align-items-center justify-content-center">
-                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                        <span v-if="product"
-                            >Are you sure you want to delete <b>{{ product.name }}</b
-                            >?</span
-                        >
+                <Dialog v-model:visible="editFlashSaleDialog" :style="{ width: '450px' }" :modal="true" class="p-fluid">
+                    <template #header>
+                        <div class="p-d-flex p-ai-center">
+                            <span class="pi pi-plus p-mr-1" style="color: darkgreen; font-weight: 700"></span>
+                            <!-- PrimeIcons class for the filter icon with custom color -->
+                            <span class="p-ml-n6 ml-2" style="color: darkgreen; font-weight: 700; font-size: larger">Edit Flash Sale</span>
+                            <!-- PrimeFlex classes for margin-left and bold text -->
+                        </div>
+                    </template>
+                    <div class="field">
+                        <label for="name" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Product</label>
+                        <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Product"></Dropdown>
                     </div>
+                    <div class="flex justify-content-between">
+                        <div>
+                            <label for="name" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Unit</label>
+                            <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Unit"></Dropdown>
+                        </div>
+                        <div>
+                            <label for="description" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Quantity</label>
+                            <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" />
+                        </div>
+                    </div>
+                    <div class="flex justify-content-between mt-3 gap-2">
+                        <div>
+                            <label for="orderDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Start Date</label>
+                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :showIcon="true" :manualInput="false" placeholder="DD/MM/YYYY"></Calendar>
+                        </div>
+                        <div>
+                            <label for="orderDate" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">End Date</label>
+                            <Calendar v-model="calenderValue" :style="{ borderRadius: '8px' }" :showIcon="true" :manualInput="false" placeholder="DD/MM/YYYY"></Calendar>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="description" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Flash Sale Price</label>
+                        <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" default="0" />
+                    </div>
+
                     <template #footer>
-                        <Button label="No" icon="pi pi-times" text @click="deleteProductDialog = false" />
-                        <Button label="Yes" icon="pi pi-check" text @click="deleteProduct" />
+                        <Button type="button" label="Delete" icon="pi pi-trash" :style="{ 'background-color': '#FCE8E8', border: '#C80000', color: '#C80000' }" @click="hideDialog()"></Button>
+                        <Button type="button" label="Save Flash Sale" icon="pi pi-save" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct()"></Button>
                     </template>
                 </Dialog>
 
-                <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
-                    <div class="flex align-items-center justify-content-center">
-                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                        <span v-if="product">Are you sure you want to delete the selected products?</span>
-                    </div>
+                <Dialog v-model:visible="deleteProductDialog" :style="{ width: '450px' }" :closable="false" :modal="true">
+                    <template #header>
+                        <div>
+                            <h5 :style="{ 'font-weight': '700' }">Are you absolutely sure?</h5>
+                            <div class="mt-1">
+                                <span :style="{ color: gray }">This action cannot be undone. This will permanently remove the flash sale.</span>
+                            </div>
+                        </div>
+                    </template>
                     <template #footer>
-                        <Button label="No" icon="pi pi-times" text @click="deleteProductsDialog = false" />
-                        <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedProducts" />
+                        <Button type="button" label="Cancel" icon="pi pi-times" :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', color: '#122C20' }" @click="hideDialog()"></Button>
+                        <Button type="button" label="Yes, Do it" icon="pi pi-check" :style="{ 'background-color': '#C80000', border: '#C80000',color:'#FFFFFF' }" @click="deleteFlashSale()"></Button>
                     </template>
                 </Dialog>
 
@@ -459,3 +512,11 @@ const initFilters = () => {
         </div>
     </div>
 </template>
+<style scoped>
+/* Custom styles for the Delete menu item */
+.delete-menu-item {
+    color: red; /* Example style */
+    font-weight: bold; /* Example style */
+}
+</style>
+
