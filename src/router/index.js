@@ -46,6 +46,12 @@ const routes = [
             name: 'flash-sales',
             component: () => import('@/views/FlashSales.vue'),
             meta: { breadcrumb: 'Flash Sales' }
+          },
+          {
+            path: 'coupons',
+            name: 'coupons',
+            component: () => import('@/views/Coupons.vue'),
+            meta: { breadcrumb: 'Coupons' }
           }
           
           // Add more Sales child routes here

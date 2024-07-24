@@ -13,7 +13,7 @@ const model = ref([
             { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/sales/invoices'},
             { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/sales/rejects' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', to: '/sales/flash-sales'},
-            { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+            { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/sales/coupons' },
             { label: 'Customers', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Lead', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
             { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
