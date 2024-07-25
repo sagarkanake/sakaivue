@@ -52,7 +52,14 @@ const routes = [
             name: 'coupons',
             component: () => import('@/views/Coupons.vue'),
             meta: { breadcrumb: 'Coupons' }
+          },
+          {
+            path: 'customers',
+            name: 'customers',
+            component: () => import('@/views/Customers.vue'),
+            meta: { breadcrumb: 'Customers' }
           }
+          
           
           // Add more Sales child routes here
         ]

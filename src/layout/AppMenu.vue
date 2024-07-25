@@ -14,7 +14,7 @@ const model = ref([
             { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/sales/rejects' },
             { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', to: '/sales/flash-sales'},
             { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/sales/coupons' },
-            { label: 'Customers', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
+            { label: 'Customers', icon: 'pi pi-fw pi-desktop', url: '/sales/customers'},
             { label: 'Lead', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
             { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
             { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
