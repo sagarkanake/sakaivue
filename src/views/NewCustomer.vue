@@ -63,6 +63,8 @@ const selectedProducts = ref(null);
 const orderNotes = ref(null);
 const selectedItemsArray = ref([]);
 const radioValue = ref(null);
+const checkboxValue = ref([]);
+
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
     { sku: 2, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
@@ -110,8 +112,8 @@ const addLineItem = () => {
 
 const addDeliveryAddress = () => {
     console.log(" addDeliveryAddress called ")
-    product.value = [];
-    submitted.value = false;
+    // product.value = [];
+    // submitted.value = false;
     deliveryAddrDialog.value = true;
 }
 const exportCSV = () => {
@@ -443,85 +445,47 @@ const exportCSV = () => {
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="productDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
+                <Dialog v-model:visible="deliveryAddrDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
                     class="p-fluid">
                     <template #header>
                         <div class="dialog-header">
                             <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
-                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line
-                                Item</span>
+                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Delivery
+                                Address</span>
                         </div>
                     </template>
-                    <div class="card">
-                        <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku"
-                            :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
-                            <template #header>
-                                <div class="flex justify-content-between"
-                                    :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
-                                    <div>
-                                        <IconField iconPosition="left" class="block mt-1 md:mt-0">
-                                            <InputIcon class="pi pi-search" />
-                                            <InputText class="w-full sm:w-auto" v-model="filters['global'].value"
-                                                placeholder="Search..." />
-                                        </IconField>
-                                    </div>
-                                    <div :style="{ 'margin-right': '-17px' }">
-                                        <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }"
-                                            v-model="selectedGradeFilter" :options="gradeFilters" optionLabel="label"
-                                            placeholder="Filter By Grade" />
-                                    </div>
-                                </div>
-                            </template>
-                            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+                    <div :style="{ 'margin-top': '-1px' }">
+                        <span :style="{ color: '#122C20', 'font-size': '14px', 'font-weight': '700' }">Location</span>
+                    </div>
+                    <div :style="{ 'margin-top': '10px', 'margin-left': '-2px' }">
+                        <div>
+                            <IconField iconPosition="left" class="block mt-1 md:mt-0 w-full">
+                                <InputIcon class="pi pi-search w-full" />
+                                <InputText class="w-full" v-model="filters['global'].value"
+                                    placeholder="Pin Location" />
+                            </IconField>
+                        </div>
+                    </div>
 
-                            <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">SKU</span>
-                                    {{ slotProps.data.sku }}
-                                </template>
-                            </Column>
-                            <Column field="name" header="Name" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Name</span>
-                                    {{ slotProps.data.name }}
-                                </template>
-                            </Column>
-                            <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Grade</span>
-                                    {{ slotProps.data.grade }}
-                                </template>
-                            </Column>
-                            <Column field="available" header="Available" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Available</span>
-                                    {{ slotProps.data.available }}
-                                </template>
-                            </Column>
-                            <Column field="committed" header="Committed" :sortable="true"
-                                headerStyle="width:14%; min-width:8rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Committed</span>
-                                    {{ slotProps.data.committed }}
-                                </template>
-                            </Column>
-                            <Column field="incoming" header="Incoming" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Incoming</span>
-                                    {{ slotProps.data.committed }}
-                                </template>
-                            </Column>
-                        </DataTable>
+                    <div class="card mt-2">
+                        <GMapMap :center="center" :zoom="10" style="width: 100%; height: 100%;">
+                            <GMapMarker :position="center" />
+                        </GMapMap>
+                    </div>
+                    <div class="grid">
+                    <div class="col-12 md:col-4">
+                        <div class="field-checkbox mb-0">
+                            <Checkbox id="checkOption1" name="option" value="Set as default address" v-model="checkboxValue" />
+                            <label for="checkOption1">Set as default address</label>
+                        </div>
+                    </div>
                     </div>
                     <div class="flex justify-content-end gap-2 ml-5">
-                        <Button type="button" label="Remove" icon="pi pi-trash"
-                            :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' }"
+                        <Button type="button" label="Cancel" icon="pi pi-times"
+                            :style="{ 'background-color': '#DFEDDF', border: ' 1px solid #DFEDDF', width: '120px','color':'#122C20','border-radius':'8px' }"
                             @click="exportCSV($event)"></Button>
-                        <Button type="button" label="Add" icon="pi pi-plus"
-                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '100px' }"
+                        <Button type="button" label="Add Delivery Address" icon="pi pi-plus"
+                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '200px' ,'border-radius':'8px'}"
                             @click="addLineItem()"></Button>
                     </div>
                 </Dialog>
@@ -612,34 +576,17 @@ const exportCSV = () => {
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="deliveryAddrDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
+                
+                <Dialog v-model:visible="productDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
                     class="p-fluid">
                     <template #header>
                         <div class="dialog-header">
                             <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
-                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Delivery
-                                Address</span>
+                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line
+                                Item</span>
                         </div>
                     </template>
-                    <div :style="{ 'margin-top': '-1px' }">
-                        <span :style="{ color: '#122C20', 'font-size': '14px', 'font-weight': '700' }">Location</span>
-                    </div>
-                    <div :style="{ 'margin-top': '10px', 'margin-left': '-2px' }">
-                        <div>
-                            <IconField iconPosition="left" class="block mt-1 md:mt-0 w-full">
-                                <InputIcon class="pi pi-search w-full" />
-                                <InputText class="w-full" v-model="filters['global'].value"
-                                    placeholder="Pin Location" />
-                            </IconField>
-                        </div>
-                    </div>
-
-                    <div class="card mt-2">
-                        <GMapMap :center="center" :zoom="10" style="width: 100%; height: 100%;">
-                            <GMapMarker :position="center" />
-                        </GMapMap>
-                    </div>
-                    <div class="card mt-2">
+                    <div class="card">
                         <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku"
                             :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
                             <template #header>
