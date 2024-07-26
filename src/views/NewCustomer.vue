@@ -62,7 +62,7 @@ const selectedGradeFilter = ref(null);
 const selectedProducts = ref(null);
 const orderNotes = ref(null);
 const selectedItemsArray = ref([]);
-
+const radioValue = ref(null);
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
     { sku: 2, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
@@ -180,58 +180,46 @@ const exportCSV = () => {
 
         <div :style="{ width: '36%' }" class="md:col-6">
             <div class="card p-fluid" :style="{}">
-                <h5>Payment</h5>
-                <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
-                    <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Subtotal</div>
-                        <div>KSH200.00</div>
-                    </div>
-                    <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Delivery Fee</div>
-                        <div>KSH00.00</div>
-                    </div>
-                    <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Coupon:FREEDL50</div>
-                        <div>(KSH200.00)<i class="pi pi-trash" :style="{ color: 'red', 'margin-left': '4px' }"></i>
+                <h5>Status</h5>
+                <div class="grid">
+                    <div class="col-12 md:col-4">
+                        <div class="field-radiobutton mb-0">
+                            <RadioButton id="option1" name="option" value="activa" v-model="radioValue" />
+                            <label for="option1">Active</label>
                         </div>
                     </div>
-                    <div class="flex justify-content-between" :style="{ 'font-weight': 'bold' }">
-                        <div>Total</div>
-                        <div>KSH400.00</div>
+                    <div class="col-12 md:col-4" :style="{'margin-left':'-45px'}">
+                        <div class="field-radiobutton mb-0">
+                            <RadioButton id="option2" name="option" value="inactive" v-model="radioValue" />
+                            <label for="option2">Inactive</label>
+                        </div>
                     </div>
-                </div>
-                <div :style="{ 'border-top': '2px solid #F6F6F6', 'margin-top': '20px' }"></div>
-                <div class="flex" :style="{ width: '100%', gap: '14px', 'margin-top': '20px' }">
-                    <InputText :style="{ width: '70%', 'border-radius': '14px' }" id="firstname1" type="text"
-                        placeholder="Coupon Code" />
-                    <button label="Apply coupon"
-                        :style="{ width: '30%', 'background-color': '#DFEDDF', border: '0', 'border-radius': '10px' }"><span
-                            :style="{ 'font-size': '11px', 'font-weight': 'bold' }">Apply Coupon</span></button>
                 </div>
             </div>
 
+    
             <div class="card" :style="{ 'margin-top': '-14px' }">
-                <h5>Customer</h5>
+                <h5 :style="{'color':'#122C20'}">Customer Details</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
+                        <div :style="{ 'font-color': '#808080' }">Customer</div>
                         <div>{{ selectedCustomer ? selectedCustomer.label : '-' }}</div>
                     </div>
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
+                        <div :style="{ 'font-color': '#808080' }">Contact Person</div>
                         <div>John Kamau</div>
                     </div>
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
+                        <div :style="{ 'font-color': '#808080' }">Email</div>
                         <div>jkamau@gmail.com</div>
                     </div>
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                        <div :style="{ 'font-color': '#808080' }">Phone</div>
                         <div>+254 2341234123</div>
                     </div>
                 </div>
-                <div :style="{ 'border-top': '2px solid #F6F6F6', 'margin-top': '20px' }"></div>
-                <h5>Billing Details</h5>
+                <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                <h5 :style="{'color':'#122C20'}">Billing Details</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
@@ -254,28 +242,27 @@ const exportCSV = () => {
                         <div>KIOYU565645BYVN</div>
                     </div>
                 </div>
-                <div :style="{ 'border-top': '2px solid #F6F6F6', 'margin-top': '20px' }"></div>
-                <h5>Delivery Details</h5>
+                <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                <h5>Default Shipping Address</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Delivery Address</div>
                         <div>Mama Ngina St, LSG Building 4th floor</div>
                     </div>
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Delivery Date</div>
-                        <div>July 30 24</div>
+                        <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
+                        <div>Jon Kamau</div>
                     </div>
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">Address</div>
-                        <div>PO Box - 0252525 - 0020</div>
+                        <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                        <div>+254 7789896543</div>
                     </div>
+                </div>
+                <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                <h5>Customer Profile</h5>
+                <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">City</div>
-                        <div>Nairobi</div>
-                    </div>
-                    <div class="flex justify-content-between">
-                        <div :style="{ 'font-color': '#F6F6F6' }">KRA Pin</div>
-                        <div>KIOYU565645BYVN</div>
+                        <span :style="{'color':'#808080'}"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet semper elit, sit amet varius odio. Nullam varius metus non orci tincidunt, at vehicula sapien dictum. Vivamus placerat orci et neque vestibulum, ac fringilla elit interdum. Curabitur eget tortor at urna dapibus fermentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sit amet lacus at urna tincidunt egestas </span>
                     </div>
                 </div>
             </div>
@@ -648,9 +635,9 @@ const exportCSV = () => {
                     </div>
 
                     <div class="card mt-2">
-                        <!-- <GMapMap :center="center" :zoom="10" style="width: 100%; height: 100%;">
-      <GMapMarker :position="center" />
-    </GMapMap> -->
+                        <GMapMap :center="center" :zoom="10" style="width: 100%; height: 100%;">
+                            <GMapMarker :position="center" />
+                        </GMapMap>
                     </div>
                     <div class="card mt-2">
                         <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku"
