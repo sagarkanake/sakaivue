@@ -258,7 +258,7 @@ const handleMenuAction = (action, item) => {
 
                             <div class="flex gap-2" :style="{ 'margin-right': '-22px' }">
                                 <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9','color':'#122C20' }" @click="exportCSV($event)"></Button>
-                                <Button type="button" label="New Order" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
+                                <Button type="button" label="New Customer" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
                             </div>
                         </div>
                     </template>

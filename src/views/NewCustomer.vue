@@ -54,6 +54,7 @@ const selectedDeliveryMethod = ref(null);
 const selectedDeliveryWindow = ref(null);
 const deliveryDate = ref(null);
 const productDialog = ref(false);
+const deliveryAddrDialog = ref(false);
 const products = ref(null);
 const product = ref({});
 const submitted = ref(false);
@@ -105,6 +106,16 @@ const addNewLineItem = () => {
 const addLineItem = () => {
     console.log('selectedProducts ', selectedProducts);
     productDialog.value = false;
+};
+
+const addDeliveryAddress = () => {
+    console.log(" addDeliveryAddress called ")
+    product.value = [];
+    submitted.value = false;
+    deliveryAddrDialog.value = true;
+}
+const exportCSV = () => {
+    dt.value.exportCSV();
 };
 </script>
 
@@ -400,7 +411,7 @@ const addLineItem = () => {
                                     @click="exportCSV($event)"></Button>
                                 <Button type="button" label="Add Delivery Address" icon="pi pi-plus"
                                     :style="{ 'background-color': '#1E4A35', border: '#1E4A35', 'color': 'white' }"
-                                    @click="addNewLineItem()"></Button>
+                                    @click="addDeliveryAddress()"></Button>
                             </div>
                         </div>
                     </template>
@@ -436,15 +447,11 @@ const addLineItem = () => {
                     </Column>
                     <Column field="default" header="Default" :sortable="true" headerStyle="width:14%; min-width:8rem;">/
                         <InputSwitch v-model="switchValue" />
-
-                        <!-- <template #body="slotProps">
-                            <span class="p-column-title">Items</span>
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template> -->
                     </Column>
                     <Column headerStyle="min-width:10rem;">
                         <template #body>
-                            <Button icon="pi pi-trash" type="button" class="p-button-text" :style="{'color':'red'}"></Button>
+                            <Button icon="pi pi-trash" type="button" class="p-button-text"
+                                :style="{ 'color': 'red' }"></Button>
                         </template>
                     </Column>
                 </DataTable>
@@ -573,8 +580,7 @@ const addLineItem = () => {
                             {{ slotProps.data.code }}
                         </template>
                     </Column>
-                    <Column field="email" header="Email" :sortable="true"
-                        headerStyle="width:14%; min-width:10rem;">
+                    <Column field="email" header="Email" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
                             {{ slotProps.data.name }}
@@ -613,21 +619,40 @@ const addLineItem = () => {
                     </Column>
                     <Column headerStyle="min-width:10rem;">
                         <template #body>
-                            <Button icon="pi pi-trash" type="button" class="p-button-text" :style="{'color':'red'}"></Button>
+                            <Button icon="pi pi-trash" type="button" class="p-button-text"
+                                :style="{ 'color': 'red' }"></Button>
                         </template>
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="productDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
+                <Dialog v-model:visible="deliveryAddrDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
                     class="p-fluid">
                     <template #header>
                         <div class="dialog-header">
                             <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
-                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line
-                                Item</span>
+                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Delivery
+                                Address</span>
                         </div>
                     </template>
-                    <div class="card">
+                    <div :style="{ 'margin-top': '-1px' }">
+                        <span :style="{ color: '#122C20', 'font-size': '14px', 'font-weight': '700' }">Location</span>
+                    </div>
+                    <div :style="{ 'margin-top': '10px', 'margin-left': '-2px' }">
+                        <div>
+                            <IconField iconPosition="left" class="block mt-1 md:mt-0 w-full">
+                                <InputIcon class="pi pi-search w-full" />
+                                <InputText class="w-full" v-model="filters['global'].value"
+                                    placeholder="Pin Location" />
+                            </IconField>
+                        </div>
+                    </div>
+
+                    <div class="card mt-2">
+                        <!-- <GMapMap :center="center" :zoom="10" style="width: 100%; height: 100%;">
+      <GMapMarker :position="center" />
+    </GMapMap> -->
+                    </div>
+                    <div class="card mt-2">
                         <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku"
                             :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
                             <template #header>
@@ -710,11 +735,14 @@ const addLineItem = () => {
                 <div :style="{ 'margin-left': '-22px' }">
                     <!-- First Row -->
                     <div>
-                        <div class="field col-12" :style = "{'margin-top': '-17px'}">
-                            <label for="orderNotes" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Write customer profile</label>
+                        <div class="field col-12" :style="{ 'margin-top': '-17px' }">
+                            <label for="orderNotes" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Write
+                                customer
+                                profile</label>
                         </div>
                         <div :style="{ 'margin-top': '-30px', 'margin-left': '15px' }">
-                            <Textarea id="orderNotes" v-model="orderNotes" rows="4" placeholder="Type your profile here..." :style="{ width: '100%' }"></Textarea>
+                            <Textarea id="orderNotes" v-model="orderNotes" rows="4"
+                                placeholder="Type your profile here..." :style="{ width: '100%' }"></Textarea>
                         </div>
                     </div>
                 </div>

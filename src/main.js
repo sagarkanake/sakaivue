@@ -105,6 +105,7 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
+// import './plugins/google-maps'; // Import the Google Maps plugin
 
 import BlockViewer from '@/components/BlockViewer.vue';
 
