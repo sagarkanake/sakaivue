@@ -472,8 +472,24 @@ const exportCSV = () => {
                             <GMapMarker :position="center" />
                         </GMapMap>
                     </div>
-                    <div class="grid">
-                    <div class="col-12 md:col-4">
+                    <div class="grid" :style="{ 'margin-left': '0px' }">
+                        <div class="flex justify-content-between gap-2">
+                            <div>
+                                <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Contact 
+                                Person</label>
+                            <InputText  id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error mt-1" placeholder="Name"
+                                aria-describedby="username-help" /> 
+                            </div>
+                            <div>
+                                <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Phone
+                                Number</label>
+                            <InputText  id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error mt-1" placeholder="Phone"                                aria-describedby="username-help" /> 
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid mt-3" :style="{ 'margin-left': '15px' }">
+                    <div>
                         <div class="field-checkbox mb-0">
                             <Checkbox id="checkOption1" name="option" value="Set as default address" v-model="checkboxValue" />
                             <label for="checkOption1">Set as default address</label>

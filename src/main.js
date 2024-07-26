@@ -105,7 +105,7 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
-// import './plugins/google-maps'; // Import the Google Maps plugin
+import googleMaps from './plugins/google-maps'; // Import the configuration
 
 import BlockViewer from '@/components/BlockViewer.vue';
 
@@ -118,6 +118,7 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(googleMaps);
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
