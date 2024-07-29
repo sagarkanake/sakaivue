@@ -26,6 +26,7 @@ const statuses = ref([
 const status = ref(null);
 const productService = new ProductService();
 let calenderValue = ref(null);
+const visibleRight = ref(false);
 const items = ref([
 { label: 'View', icon: 'pi pi-fw pi-eye', command: () => handleMenuAction('Edit') },
     { label: 'Edit', icon: 'pi pi-fw pi-plus', command: () => handleMenuAction('Edit') },
@@ -240,7 +241,7 @@ const handleMenuAction = (action, item) => {
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
-                            <h5 class="m-0">Customers</h5>
+                            <h5 class="m-0">Leads</h5>
                         </div>
                         <div class="flex justify-content-between gap-6 mt-2" :style="{ 'margin-left': '-15px' }">
                             <div class="flex gap-2">
@@ -254,11 +255,17 @@ const handleMenuAction = (action, item) => {
                                     <!-- <label for="state">Status</label> -->
                                     <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Status"></Dropdown>
                                 </div>
+                                <div>
+                                    <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined @click="openFilter()" />
+                                </div>
+                                <div>
+                                    <Button type="button" icon="pi pi-filter-slash" outlined @click="clearFilter()" />
+                                </div>
                             </div>
 
                             <div class="flex gap-2" :style="{ 'margin-right': '-22px' }">
                                 <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9','color':'#122C20' }" @click="exportCSV($event)"></Button>
-                                <Button type="button" label="New Customer" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
+                                <Button type="button" label="New Lead" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
                             </div>
                         </div>
                     </template>
@@ -266,7 +273,9 @@ const handleMenuAction = (action, item) => {
                     <Column field="customer" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
-                            {{ slotProps.data.code }}
+                            <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
+                                {{ slotProps.data.code }}
+                              </button>
                         </template>
                     </Column>
                     <Column field="category" header="Category" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -281,31 +290,26 @@ const handleMenuAction = (action, item) => {
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="email" header="Email" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-                        </template>
-                    </Column>
                     <Column field="phoneNumber" header="Phone Number" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="orders" header="Orders" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="email" header="Email" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="orderValue" header="Order Value" headerStyle="width:14%; min-width:10rem;">
+                    
+                    <Column field="contactDate" header="Contact Date" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="qbBalance" header="QB Balance" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="lastContact" header="Last Contact" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
                             <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
@@ -317,6 +321,25 @@ const handleMenuAction = (action, item) => {
                             <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
+                    <Column field="source" header="Source" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Order Date</span>
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                        </template>
+                    </Column>
+                    <Column field="dealOpp" header="Deal Oppurtunity" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Order Date</span>
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                        </template>
+                    </Column>
+                    <Column field="owner" header="Owner" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Order Date</span>
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                        </template>
+                    </Column>
+                    
                     <Column headerStyle="min-width:10rem;">
                         <template #body="slotProps">
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded" @click="$refs.menu2.toggle($event)"></Button>
@@ -484,6 +507,81 @@ const handleMenuAction = (action, item) => {
                 </Dialog>
             </div>
         </div>
+        <Sidebar v-model:visible="visibleRight" :baseZIndex="1000" position="right" :style="{ width: '400px' }">
+            <template #header>
+                                    <h5 class="flex" style="font-weight: 700;color:#122C20">CO-2024-04-2669</h5>
 
+            </template>
+            <div :style="{ 'margin-top': '-5px' }">
+        <h5 style="font-weight: 700;color:#122C20" >Rejection Details</h5>
+        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Delivery Date</div>
+                <div>22/06/24</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
+                <div>John Kamau</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Order No. </div>
+                <div>CO-2024-04-2669</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Rejection Reason</div>
+                <div>Over ripe</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Receiver</div>
+                <div>Jon Kamau</div>
+            </div>
+        </div>
+        <h5 style="font-weight: 700;color:#122C20">Order Items</h5>
+    <div>
+        <DataTable
+            ref="dt"
+            :value="products"
+            v-model:selection="selectedProducts"
+            dataKey="id"
+            :scrollable="true" scrollHeight="300px"
+        >
+            <Column field="sku" header="SKU" sortable = "true" headerStyle="width:14%; min-width:10rem;" @click="openSidebar()">
+                <template #body="slotProps">
+                    <span class="p-column-title">Order No.</span>
+                    <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
+    {{ slotProps.data.code }}
+  </button>
+                </template>
+            </Column>
+            <Column field="name" header="Name" sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                <template #body="slotProps">
+                    <span class="p-column-title">Customer</span>
+                    {{ slotProps.data.name }}
+                </template>
+            </Column>
+            <Column field="grade" header="Grade" sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                <template #body="slotProps">
+                    <span class="p-column-title">Order Date</span>
+                    <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                </template>
+            </Column>
+            <Column field="unit" header="Unit"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                <template #body="slotProps">
+                    <span class="p-column-title">Status</span>
+                    <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                </template>
+            </Column>
+            <Column field="quantity" header="Quantity"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
+                <template #body="slotProps">
+                    <span class="p-column-title">Status</span>
+                    <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                </template>
+            </Column>
+        </DataTable>
     </div>
+    </div>
+        </Sidebar>
+   
+    </div>
+
 </template>
