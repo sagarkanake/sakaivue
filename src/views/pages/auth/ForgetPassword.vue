@@ -38,8 +38,8 @@ const logoUrl = computed(() => {
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
-            <div>
-                <div class="w-full surface-card py-8 px-5 sm:px-8">
+            <div class="w-9 ">
+                <div class="surface-card py-8 px-4 sm:px-4">
                     <div class="text-left mb-5">
                         <div class="text-900 text-3xl font-medium mb-3">Forgot Password</div>
                         <span class="text-600 font-medium">Enter your email address and we'll send you instructions to reset your password</span>
@@ -47,15 +47,9 @@ const logoUrl = computed(() => {
 
                     <div>
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="email" />
-                        <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                            <div class="flex align-items-center">
-                                <!-- <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label> -->
-                            </div>
-                        </div>
+                        <InputText id="email1" type="text" placeholder="Email address" class="w-full mb-5" style="padding: 1rem" v-model="email" />
                         <Toast/>
-                        <Button label="Send Reset Instructions" class="w-full p-3 text-xl"  :style="{'background-color':'#1E4A35'}" @click="login()"></Button>
+                        <Button label="Send Reset Instructions" class="w-full text-xl border-round-xl h-3rem"  :style="{'background-color':'#1E4A35'}" @click="login()"></Button>
                     </div>
                 </div>
             </div>
