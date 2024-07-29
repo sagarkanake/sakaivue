@@ -41,7 +41,7 @@ const logoUrl = computed(() => {
             <div>
                 <div class="w-full surface-card py-8 px-5 sm:px-8">
                     <div class="text-left mb-5">
-                        <div class="text-900 text-3xl font-medium mb-3">Login</div>
+                        <div class="text-900 text-3xl font-medium mb-3"></div>
                         <span class="text-600 font-medium">Enter your email below to login to your account</span>
                     </div>
 
@@ -57,12 +57,7 @@ const logoUrl = computed(() => {
                                 <!-- <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
                                 <label for="rememberme1">Remember me</label> -->
                             </div>
-<router-link 
-  to="/auth/forget-password" 
-  class="font-medium no-underline ml-2 text-left cursor-pointer" 
-  style="color: var(--primary-color)">
-  Forgot password?
-</router-link>
+                            <a class="font-medium no-underline ml-2 text-left cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
                         <Toast/>
                         <Button label="Sign In" class="w-full p-3 text-xl" @click="login()"></Button>

@@ -221,6 +221,11 @@ const routes = [
     component: () => import('@/views/pages/auth/Login.vue')
   },
   {
+    path: '/auth/forget-password',
+    name: 'forget-password',
+    component: () => import('@/views/pages/auth/ForgetPassword.vue')
+  },
+  {
     path: '/auth/access',
     name: 'accessDenied',
     component: () => import('@/views/pages/auth/Access.vue')
