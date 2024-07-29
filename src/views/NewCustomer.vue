@@ -64,7 +64,7 @@ const orderNotes = ref(null);
 const selectedItemsArray = ref([]);
 const radioValue = ref(null);
 const checkboxValue = ref([]);
-
+const addNewUserDialog = ref(false);
 const tableData = ref([
     { sku: 1, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
     { sku: 2, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 },
@@ -103,6 +103,12 @@ const addNewLineItem = () => {
     product.value = [];
     submitted.value = false;
     productDialog.value = true;
+};
+
+const addNewUser = () => {
+    product.value = [];
+    submitted.value = false;
+    addNewUserDialog.value = true;
 };
 
 const addLineItem = () => {
@@ -190,7 +196,7 @@ const exportCSV = () => {
                             <label for="option1">Active</label>
                         </div>
                     </div>
-                    <div class="col-12 md:col-4" :style="{'margin-left':'-45px'}">
+                    <div class="col-12 md:col-4" :style="{ 'margin-left': '-45px' }">
                         <div class="field-radiobutton mb-0">
                             <RadioButton id="option2" name="option" value="inactive" v-model="radioValue" />
                             <label for="option2">Inactive</label>
@@ -199,9 +205,9 @@ const exportCSV = () => {
                 </div>
             </div>
 
-    
+
             <div class="card" :style="{ 'margin-top': '-14px' }">
-                <h5 :style="{'color':'#122C20'}">Customer Details</h5>
+                <h5 :style="{ 'color': '#122C20' }">Customer Details</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#808080' }">Customer</div>
@@ -221,7 +227,7 @@ const exportCSV = () => {
                     </div>
                 </div>
                 <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
-                <h5 :style="{'color':'#122C20'}">Billing Details</h5>
+                <h5 :style="{ 'color': '#122C20' }">Billing Details</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
                         <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
@@ -264,7 +270,12 @@ const exportCSV = () => {
                 <h5>Customer Profile</h5>
                 <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
                     <div class="flex justify-content-between">
-                        <span :style="{'color':'#808080'}"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet semper elit, sit amet varius odio. Nullam varius metus non orci tincidunt, at vehicula sapien dictum. Vivamus placerat orci et neque vestibulum, ac fringilla elit interdum. Curabitur eget tortor at urna dapibus fermentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sit amet lacus at urna tincidunt egestas </span>
+                        <span :style="{ 'color': '#808080' }"> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Quisque sit amet semper elit, sit amet varius odio. Nullam varius metus non orci tincidunt,
+                            at vehicula sapien dictum. Vivamus placerat orci et neque vestibulum, ac fringilla elit
+                            interdum. Curabitur eget tortor at urna dapibus fermentum. Pellentesque habitant morbi
+                            tristique senectus et netus et malesuada fames ac turpis egestas. Sed sit amet lacus at urna
+                            tincidunt egestas </span>
                     </div>
                 </div>
             </div>
@@ -277,6 +288,7 @@ const exportCSV = () => {
                     <!-- First Row -->
                     <div class="form-row flex flex-wrap gap-2 ml-3 mt-1">
                         <div class="field flex-1 flex flex-column">
+
                             <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">First
                                 Name</label>
                             <InputText id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error"
@@ -475,33 +487,35 @@ const exportCSV = () => {
                     <div class="grid" :style="{ 'margin-left': '0px' }">
                         <div class="flex justify-content-between gap-2">
                             <div>
-                                <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Contact 
-                                Person</label>
-                            <InputText  id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error mt-1" placeholder="Name"
-                                aria-describedby="username-help" /> 
+                                <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Contact
+                                    Person</label>
+                                <InputText id="username2" :style="{ borderRadius: '8px' }" type="username"
+                                    class="p-error mt-1" placeholder="Name" aria-describedby="username-help" />
                             </div>
                             <div>
                                 <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Phone
-                                Number</label>
-                            <InputText  id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error mt-1" placeholder="Phone"                                aria-describedby="username-help" /> 
+                                    Number</label>
+                                <InputText id="username2" :style="{ borderRadius: '8px' }" type="username"
+                                    class="p-error mt-1" placeholder="Phone" aria-describedby="username-help" />
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="grid mt-3" :style="{ 'margin-left': '15px' }">
-                    <div>
-                        <div class="field-checkbox mb-0">
-                            <Checkbox id="checkOption1" name="option" value="Set as default address" v-model="checkboxValue" />
-                            <label for="checkOption1">Set as default address</label>
+                        <div>
+                            <div class="field-checkbox mb-0">
+                                <Checkbox id="checkOption1" name="option" value="Set as default address"
+                                    v-model="checkboxValue" />
+                                <label for="checkOption1">Set as default address</label>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <div class="flex justify-content-end gap-2 ml-5">
                         <Button type="button" label="Cancel" icon="pi pi-times"
-                            :style="{ 'background-color': '#DFEDDF', border: ' 1px solid #DFEDDF', width: '120px','color':'#122C20','border-radius':'8px' }"
+                            :style="{ 'background-color': '#DFEDDF', border: ' 1px solid #DFEDDF', width: '120px', 'color': '#122C20', 'border-radius': '8px' }"
                             @click="exportCSV($event)"></Button>
                         <Button type="button" label="Add Delivery Address" icon="pi pi-plus"
-                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '200px' ,'border-radius':'8px'}"
+                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '200px', 'border-radius': '8px' }"
                             @click="addLineItem()"></Button>
                     </div>
                 </Dialog>
@@ -535,7 +549,7 @@ const exportCSV = () => {
                                     @click="exportCSV($event)"></Button>
                                 <Button type="button" label="Add User" icon="pi pi-plus"
                                     :style="{ 'background-color': '#1E4A35', border: '#1E4A35', 'color': 'white' }"
-                                    @click="addNewLineItem()"></Button>
+                                    @click="addNewUser()"></Button>
                             </div>
                         </div>
                     </template>
@@ -592,88 +606,71 @@ const exportCSV = () => {
                     </Column>
                 </DataTable>
 
-                
-                <Dialog v-model:visible="productDialog" :style="{ width: '650px', height: '430px' }" :modal="true"
+
+                <Dialog v-model:visible="addNewUserDialog" :style="{ width: '650px', height: '380px' }" :modal="true"
                     class="p-fluid">
                     <template #header>
                         <div class="dialog-header">
                             <i class="pi pi-plus" :style="{ 'margin-right': '8px', color: '#122C20' }"></i>
-                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add Line
-                                Item</span>
+                            <span :style="{ color: '#122C20', 'font-size': '18px', 'font-weight': '700' }">Add
+                                User</span>
                         </div>
                     </template>
-                    <div class="card">
-                        <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku"
-                            :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
-                            <template #header>
-                                <div class="flex justify-content-between"
-                                    :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
-                                    <div>
-                                        <IconField iconPosition="left" class="block mt-1 md:mt-0">
-                                            <InputIcon class="pi pi-search" />
-                                            <InputText class="w-full sm:w-auto" v-model="filters['global'].value"
-                                                placeholder="Search..." />
-                                        </IconField>
-                                    </div>
-                                    <div :style="{ 'margin-right': '-17px' }">
-                                        <Dropdown id="deliveryWindow" :style="{ borderRadius: '8px' }"
-                                            v-model="selectedGradeFilter" :options="gradeFilters" optionLabel="label"
-                                            placeholder="Filter By Grade" />
-                                    </div>
+                    <div class="mt-4">
+                        <div :style="{ 'margin-left': '-22px' }">
+                            <!-- First Row -->
+                            <div class="form-row flex flex-wrap gap-2 ml-3 mt-1">
+                                <div class="field flex-1 flex flex-column">
+                                    <label for="customer" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">First
+                                        Name</label>
+                                    <InputText id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error"
+                                        aria-describedby="username-help" placeholer="Name"/>
                                 </div>
-                            </template>
-                            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-
-                            <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">SKU</span>
-                                    {{ slotProps.data.sku }}
-                                </template>
-                            </Column>
-                            <Column field="name" header="Name" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Name</span>
-                                    {{ slotProps.data.name }}
-                                </template>
-                            </Column>
-                            <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Grade</span>
-                                    {{ slotProps.data.grade }}
-                                </template>
-                            </Column>
-                            <Column field="available" header="Available" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Available</span>
-                                    {{ slotProps.data.available }}
-                                </template>
-                            </Column>
-                            <Column field="committed" header="Committed" :sortable="true"
-                                headerStyle="width:14%; min-width:8rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Committed</span>
-                                    {{ slotProps.data.committed }}
-                                </template>
-                            </Column>
-                            <Column field="incoming" header="Incoming" :sortable="true"
-                                headerStyle="width:14%; min-width:10rem;">
-                                <template #body="slotProps">
-                                    <span class="p-column-title">Incoming</span>
-                                    {{ slotProps.data.committed }}
-                                </template>
-                            </Column>
-                        </DataTable>
+                                <div class="field flex-1 flex flex-column">
+                                    <label for="paymentType" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Last
+                                        Name</label>
+                                        <InputText id="username2" :style="{ borderRadius: '8px' }" type="username" class="p-error"
+                                        aria-describedby="username-help"  placeholer="Name"/>
+                                </div>
+                            </div>
+        
+                            <!-- Second Row -->
+                            <div class="flex gap-2 ml-3">
+                                <div class="field flex-1 flex flex-column">
+                                    <label for="deliveryMethod"
+                                        :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Email</label>
+                                    <InputText id="username2" :style="{ borderRadius: '8px' }" type="username"
+                                        class="p-error mt-1" aria-describedby="username-help"  placeholer="Name" />
+                                    <!-- <Dropdown id="deliveryLocation" v-model="selectedDeliveryLocation" :options="deliveryLocations" placeholder="Select Delivery Location" /> -->
+                                </div>
+                                <div class="field flex-1 flex flex-column">
+                                    <label for="deliveryMethod" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Phone
+                                        Number</label>
+                                    <InputText id="username2" :style="{ borderRadius: '8px' }" type="username"
+                                        class="p-error mt-1" aria-describedby="username-help" />
+                                </div>
+                            </div>
+        
+                            <!-- Third Row -->
+                            <div>
+                                <div class="field flex-1 flex flex-column col-12" :style="{ 'margin-top': '-10px' }">
+                                    <label for="orderNotes" :style="{ 'font-weight': 'bold', 'font-size': 'small' }">Designation
+                                        </label>
+                                        <InputText id="username2" :style="{ borderRadius: '8px' }" type="username"
+                                        class="p-error mt-1" aria-describedby="username-help" placeholder="e.g Procurement Manager" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex justify-content-end gap-2 ml-5">
-                        <Button type="button" label="Remove" icon="pi pi-trash"
-                            :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' }"
+                        <Button type="button" label="Cancel" icon="pi pi-times"
+                            :style="{ 'background-color': '#DFEDDF', border: '#DFEDDF', width: '100px' ,'color':'#122C20'}"
                             @click="exportCSV($event)"></Button>
-                        <Button type="button" label="Add" icon="pi pi-plus"
-                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '100px' }"
+                        <Button type="button" label="Send Invitation" icon="pi pi-plus"
+                            :style="{ 'background-color': '#1E4A35', border: '#1E4A35', width: '170px' }"
                             @click="addLineItem()"></Button>
                     </div>
+                    
                 </Dialog>
 
             </div>
@@ -694,6 +691,11 @@ const exportCSV = () => {
                             <Textarea id="orderNotes" v-model="orderNotes" rows="4"
                                 placeholder="Type your profile here..." :style="{ width: '100%' }"></Textarea>
                         </div>
+                    </div>
+                    <div class="flex justify-content-end mt-4">
+                        <Button type="button" label="Save Customer Profile" icon="pi pi-save"
+                            :style="{ 'background-color': '#DFEDDF', border: '#1E4A35', width: '200px','color': '#122C20' }"
+                            @click="addLineItem()"></Button>
                     </div>
                 </div>
             </div>
