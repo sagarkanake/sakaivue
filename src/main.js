@@ -106,6 +106,7 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 import googleMaps from './plugins/google-maps'; // Import the configuration
+import store from './store';
 
 import BlockViewer from '@/components/BlockViewer.vue';
 
@@ -119,6 +120,7 @@ app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
 app.use(googleMaps);
+app.use(store);
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);

@@ -1,4 +1,6 @@
+
 import { createStore } from 'vuex';
+import { AuthService } from '../service/AuthService';
 
 const store = createStore({
   state: {
@@ -13,8 +15,16 @@ const store = createStore({
     },
   },
   actions: {
-    login({ commit }, token) {
-      commit('setToken', token);
+    async login({ commit }, credentials) {
+      const authService = new AuthService();
+      try {
+        const data = await authService.login(credentials);
+        commit('setToken', data.token);
+        return true; // Indicate login success
+      } catch (error) {
+        console.error('Error logging in:', error);
+        return false; // Indicate login failure
+      }
     },
     logout({ commit }) {
       commit('clearToken');

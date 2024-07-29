@@ -10,21 +10,28 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const checked = ref(false);
-
+import { useStore } from 'vuex';
+const store = useStore();
 const logoUrl = computed(() => {
      return `/demo/images/${layoutConfig.darkTheme.value ? 'login-logo' : 'login-logo'}.svg`;
     // return `/demo/images/logo.png`;
 });
 
-const login = () => {
-    if(email.value == 'sankalpa@digitalflake.com' && password.value =='123456'){
-    router.push('/');
-    }else{
-    toast.add({ severity: 'Error', summary: 'Error', detail: 'Login Failed..!!', life: 1000 });
 
-    }
- 
+    const login = async () => {
+  const credentials = {
+    email: email.value,
+    password: password.value
+  };
+  const success = await store.dispatch('login', credentials);
+  if (success) {
+    router.push('/');
+  } else {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Login Failed..!!', life: 1000 });
+  }
 };
+ 
+
 </script>
 
 <template>
