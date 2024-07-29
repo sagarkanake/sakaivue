@@ -509,76 +509,95 @@ const handleMenuAction = (action, item) => {
         </div>
         <Sidebar v-model:visible="visibleRight" :baseZIndex="1000" position="right" :style="{ width: '400px' }">
             <template #header>
-                                    <h5 class="flex" style="font-weight: 700;color:#122C20">CO-2024-04-2669</h5>
-
+            <h5 class="flex" style="font-weight: 700;color:#122C20">LSG Sky Chef</h5>
+            <span :style="{'color':'#808080','margin-left': '-99%','margin-top':'30px'}"> Victor Mutinda</span>
             </template>
             <div :style="{ 'margin-top': '-5px' }">
-        <h5 style="font-weight: 700;color:#122C20" >Rejection Details</h5>
+        <h5 style="font-weight: 700;color:#122C20" >Business Details</h5>
         <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
             <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Delivery Date</div>
-                <div>22/06/24</div>
+                <div :style="{ 'font-color': '#F6F6F6' }">Business Name</div>
+                <div>LSG Sky Chef</div>
             </div>
             <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Customer</div>
-                <div>John Kamau</div>
+                <div :style="{ 'font-color': '#F6F6F6' }">Category</div>
+                <div>School</div>
             </div>
             <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Order No. </div>
-                <div>CO-2024-04-2669</div>
+                <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
+                <div>jonkamau@gmail.com</div>
             </div>
             <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Rejection Reason</div>
-                <div>Over ripe</div>
+                <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                <div>9087676357</div>
             </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Receiver</div>
-                <div>Jon Kamau</div>
-            </div>
+            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
         </div>
-        <h5 style="font-weight: 700;color:#122C20">Order Items</h5>
-    <div>
-        <DataTable
-            ref="dt"
-            :value="products"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :scrollable="true" scrollHeight="300px"
-        >
-            <Column field="sku" header="SKU" sortable = "true" headerStyle="width:14%; min-width:10rem;" @click="openSidebar()">
-                <template #body="slotProps">
-                    <span class="p-column-title">Order No.</span>
-                    <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
-    {{ slotProps.data.code }}
-  </button>
-                </template>
-            </Column>
-            <Column field="name" header="Name" sortable = "true" headerStyle="width:14%; min-width:10rem;">
-                <template #body="slotProps">
-                    <span class="p-column-title">Customer</span>
-                    {{ slotProps.data.name }}
-                </template>
-            </Column>
-            <Column field="grade" header="Grade" sortable = "true" headerStyle="width:14%; min-width:10rem;">
-                <template #body="slotProps">
-                    <span class="p-column-title">Order Date</span>
-                    <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-                </template>
-            </Column>
-            <Column field="unit" header="Unit"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
-                <template #body="slotProps">
-                    <span class="p-column-title">Status</span>
-                    <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
-                </template>
-            </Column>
-            <Column field="quantity" header="Quantity"  sortable = "true" headerStyle="width:14%; min-width:10rem;">
-                <template #body="slotProps">
-                    <span class="p-column-title">Status</span>
-                    <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
-                </template>
-            </Column>
-        </DataTable>
-    </div>
+        <h5 style="font-weight: 700;color:#122C20">Contact Details</h5>
+        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
+                <div>LSG Sky Chef</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
+                <div>jonkamau@gmail.com</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                <div>9087676357</div>
+            </div>
+            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+            <h5 style="font-weight: 700;color:#122C20">Status</h5>
+        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
+                <div>29/07/2024</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
+                <div>29/07/2024m</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
+                <div>Onboarding</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
+                <div>Cold Call</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
+                <div>Medium</div>
+            </div>
+            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+        </div>
+        <h5 style="font-weight: 700;color:#122C20">Updates</h5>
+        <span :style="{'font-color': '#F6F6F6'}"> 06 July 24</span>
+        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
+                <div>29/07/2024</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
+                <div>29/07/2024m</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
+                <div>Onboarding</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
+                <div>Cold Call</div>
+            </div>
+            <div class="flex justify-content-between">
+                <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
+                <div>Medium</div>
+            </div>
+            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+        </div>
+        </div>
     </div>
         </Sidebar>
    

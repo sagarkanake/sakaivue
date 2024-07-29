@@ -71,12 +71,12 @@ const isOutsideClicked = (event) => {
 </script>
 
 <template>
-    <div class="layout-topbar">
+    <div class="layout-topbar flex justify-content-between  ">
         <router-link to="/" class="layout-topbar-logo" >
             <img :src="logoUrl" alt="logo" :style="{height: 'auto !important'}"/>
         </router-link>
 
-<div class="col-12">
+<div class="col-6">
             <div>
                  <Breadcrumb />
             </div>
