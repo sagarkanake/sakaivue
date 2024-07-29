@@ -12,22 +12,21 @@ const password = ref('');
 const checked = ref(false);
 import { useStore } from 'vuex';
 const store = useStore();
+import { AuthService } from '@/service/AuthService';
+const authService = new AuthService(); 
 const logoUrl = computed(() => {
      return `/demo/images/${layoutConfig.darkTheme.value ? 'login-logo' : 'login-logo'}.svg`;
     // return `/demo/images/logo.png`;
 });
 
 
-    const login = async () => {
-  const credentials = {
-    email: email.value,
-    password: password.value
-  };
-  const success = await store.dispatch('login', credentials);
-  if (success) {
-    router.push('/');
-  } else {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Login Failed..!!', life: 1000 });
+const forgetPassword = async () => {
+  try {
+    await authService.forgetPassword({ email: email.value });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Password reset instructions sent to your email.', life: 3000 });
+    router.push('/login'); // Navigate to login page or any other page
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again.', life: 3000 });
   }
 };
  
@@ -49,7 +48,7 @@ const logoUrl = computed(() => {
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email1" type="text" placeholder="Email address" class="w-full mb-5" style="padding: 1rem" v-model="email" />
                         <Toast/>
-                        <Button label="Send Reset Instructions" class="w-full text-xl border-round-xl h-3rem"  :style="{'background-color':'#1E4A35'}" @click="login()"></Button>
+                        <Button label="Send Reset Instructions" class="w-full text-xl border-round-xl h-3rem"  :style="{'background-color':'#1E4A35'}" @click="forgetPassword()"></Button>
                     </div>
                 </div>
             </div>
