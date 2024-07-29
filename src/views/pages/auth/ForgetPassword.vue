@@ -41,26 +41,21 @@ const logoUrl = computed(() => {
             <div>
                 <div class="w-full surface-card py-8 px-5 sm:px-8">
                     <div class="text-left mb-5">
-                        <div class="text-900 text-3xl font-medium mb-3"></div>
-                        <span class="text-600 font-medium">Enter your email below to login to your account</span>
+                        <div class="text-900 text-3xl font-medium mb-3">Forgot Password</div>
+                        <span class="text-600 font-medium">Enter your email address and we'll send you instructions to reset your password</span>
                     </div>
 
                     <div>
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="email" />
-
-                        <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
-
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
                                 <!-- <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
                                 <label for="rememberme1">Remember me</label> -->
                             </div>
-                            <a class="font-medium no-underline ml-2 text-left cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
                         <Toast/>
-                        <Button label="Sign In" class="w-full p-3 text-xl" @click="login()"></Button>
+                        <Button label="Send Reset Instructions" class="w-full p-3 text-xl"  :style="{'background-color':'#1E4A35'}" @click="login()"></Button>
                     </div>
                 </div>
             </div>
