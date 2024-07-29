@@ -57,7 +57,7 @@ const logoUrl = computed(() => {
                                 <!-- <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
                                 <label for="rememberme1">Remember me</label> -->
                             </div>
-                            <!-- <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a> -->
+                            <a class="font-medium no-underline ml-2 text-left cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
                         <Toast/>
                         <Button label="Sign In" class="w-full p-3 text-xl" @click="login()"></Button>
