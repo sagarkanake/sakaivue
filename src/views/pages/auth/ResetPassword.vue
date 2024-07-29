@@ -20,16 +20,14 @@ const logoUrl = computed(() => {
 });
 
 
-const forgetPassword = async () => {
-    router.push('/auth/reset-password'); 
-//   try {
-    
-//     await authService.forgetPassword({ email: email.value });
-//     toast.add({ severity: 'success', summary: 'Success', detail: 'Password reset instructions sent to your email.', life: 3000 });
-//     router.push('/auth/reset-password'); // Navigate to login page or any other page
-//   } catch (error) {
-//     toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again.', life: 3000 });
-//   }
+const resetPassword = async () => {
+  try {
+    await authService.resetPassword({ email: email.value });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Password reset instructions sent to your email.', life: 3000 });
+    router.push('/login'); // Navigate to login page or any other page
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again.', life: 3000 });
+  }
 };
  
 
@@ -42,15 +40,19 @@ const forgetPassword = async () => {
             <div class="w-9 ">
                 <div class="surface-card py-8 px-4 sm:px-4">
                     <div class="text-left mb-5">
-                        <div class="text-900 text-3xl font-medium mb-3">Forgot Password</div>
-                        <span class="text-600 font-medium">Enter your email address and we'll send you instructions to reset your password</span>
+                        <div class="text-900 text-3xl font-medium mb-3">Enter New Password</div>
+                        <span class="text-600 font-medium">Create a strong password to keep your account secure</span>
                     </div>
 
                     <div>
-                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
+                        <label for="email1" class="block text-900 text-xl font-medium mb-2">New Password</label>
                         <InputText id="email1" type="text" placeholder="Email address" class="w-full mb-5" style="padding: 1rem" v-model="email" />
+
+                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Confirm Password</label>
+                        <InputText id="email1" type="text" placeholder="Email address" class="w-full mb-5" style="padding: 1rem" v-model="email" />
+
                         <Toast/>
-                        <Button label="Send Reset Instructions" class="w-full text-xl border-round-xl h-3rem"  :style="{'background-color':'#1E4A35'}" @click="forgetPassword()"></Button>
+                        <Button label="Reset Password" class="w-full text-xl border-round-xl h-3rem"  :style="{'background-color':'#1E4A35'}" @click="resetPassword()"></Button>
                     </div>
                 </div>
             </div>

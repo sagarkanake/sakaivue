@@ -226,6 +226,11 @@ const routes = [
     component: () => import('@/views/pages/auth/ForgetPassword.vue')
   },
   {
+    path: '/auth/reset-password',
+    name: 'reset-password',
+    component: () => import('@/views/pages/auth/ResetPassword.vue')
+  },
+  {
     path: '/auth/access',
     name: 'accessDenied',
     component: () => import('@/views/pages/auth/Access.vue')

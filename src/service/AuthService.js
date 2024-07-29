@@ -11,5 +11,10 @@ export class AuthService {
   forgetPassword(credentials){
     return apiClient.post('/auth/forget-password', credentials)
       .then(response => response.data);
-  }
+  };
+
+  forgetPassword(credentials){
+    return apiClient.post('/auth/reset-password', credentials)
+      .then(response => response.data);
+  };
 }
