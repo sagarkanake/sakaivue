@@ -137,7 +137,7 @@ const createId = () => {
 };
 
 const newOrder = () => {
-    router.push({ path: '/sales/orders/new-orders' });
+    router.push({ path: '/sales/new-orders' });
 };
 
 const exportCSV = () => {

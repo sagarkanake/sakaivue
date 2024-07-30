@@ -8,4 +8,9 @@ export class OrdersService{
         return apiClient.get('/orders')
       .then(response => response.data);
     }
+
+    createNewOrder(){
+      return apiClient.post('/orders')
+      .then(response => response.data);
+    }
 }

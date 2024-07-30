@@ -21,14 +21,20 @@ const routes = [
             component: () => import('@/views/SalesOrders.vue'),
             meta: { breadcrumb: 'Orders' },
             children : [
-              {
-                path: 'new-orders',
-                name: 'NewOrders',
-                component: () => import('@/views/NewOrder.vue'),
-                meta: { breadcrumb: 'New Order' }
-              },
+              // {
+              //   path: 'new-orders',
+              //   name: 'NewOrders',
+              //   component: () => import('@/views/NewOrder.vue'),
+              //   meta: { breadcrumb: 'New Order' }
+              // },
             ]
           },
+          {
+              path: 'new-orders',
+              name: 'NewOrders',
+              component: () => import('@/views/NewOrder.vue'),
+              meta: { breadcrumb: 'New Order' }
+            },
           {
             path: 'invoices',
             name: 'sales-invoices',
