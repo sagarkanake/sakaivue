@@ -4,6 +4,8 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import { ProductService } from '@/service/ProductService';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
+import DataTable from 'primevue/datatable';
+
 import { OrdersService } from '@/service/OrdersService';
 const ordersService = new OrdersService(); 
 const toast = useToast();
@@ -46,19 +48,19 @@ onBeforeMount(() => {
     initFilters();
 });
 const fetchAllOrders = async () => {
-      try {
-    
-        console.log("Fetch all orders called...!!", ordersService.fetchAllOrders())
-        const data = await ordersService.fetchAllOrders();
-       
- orders.value = data;
- console.log("Orders ", orders)
-  } catch (error) {
-  }
+    ordersService.fetchAllOrders()
+    .then(data => {
+      console.log("Fetched orders:", data);
+      orders.value = data;
+    })
+    .catch(error => {
+      console.error("Error fetching orders", error);
+    });
 }
 onMounted(() => {
+ 
+
     // productService.getProducts().then((data) => (products.value = data));
-    // console.log("Products ", product)
     fetchAllOrders();
 });
 const formatCurrency = (value) => {
@@ -240,13 +242,13 @@ const initFilters = () => {
                     ref="dt"
                     :value="orders.value"
                     v-model:selection="selectedOrders"
-                    dataKey="order_id"
+                    dataKey="id"
                     :paginator="true"
                     :rows="10"
                     :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} orders"
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
@@ -282,8 +284,10 @@ const initFilters = () => {
                         </div>
                     </template>
 
+                    {{ orders }}
                     <Column field="order_number" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
+                            <pre>{{ orders }}</pre>
                             <span class="p-column-title">Order No.</span>
                             {{ slotProps.data.order_number   }}
                         </template>
