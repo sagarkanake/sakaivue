@@ -12,7 +12,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(config => {
   // Retrieve the token from local storage or any global state management
   const token = localStorage.getItem('authToken'); // Example of token retrieval
-  console.log("token ", token)
+  console.log("Bearer token ", token)
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }

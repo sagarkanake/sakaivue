@@ -21,16 +21,17 @@ const logoUrl = computed(() => {
 
 
 const forgetPassword = async () => {
-    router.push('/auth/reset-password'); 
-//   try {
-    
-//     await authService.forgetPassword({ email: email.value });
-//     toast.add({ severity: 'success', summary: 'Success', detail: 'Password reset instructions sent to your email.', life: 3000 });
-//     router.push('/auth/reset-password'); // Navigate to login page or any other page
-//   } catch (error) {
-//     toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again.', life: 3000 });
-//   }
+  authService.forgetPassword({ email: email.value })
+    .then(() => {
+      toast.add({ severity: 'success', summary: 'Success', detail: 'Password reset instructions sent to your email.', life: 3000 });
+    //   router.push('/auth/reset-password'); // Navigate to reset password page
+    })
+    .catch((error) => {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again.', life: 3000 });
+      console.error('Error:', error); // Optional: Log error details for debugging
+    });
 };
+
  
 
 </script>

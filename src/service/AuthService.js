@@ -18,7 +18,7 @@ export class AuthService {
       .then(response => response.data);
   };
 
-  forgetPassword(credentials){
+  resetPassword(credentials){
     return apiClient.post('/auth/reset-password', credentials)
       .then(response => response.data);
   };
