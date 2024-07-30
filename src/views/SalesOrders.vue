@@ -1,17 +1,24 @@
 <script setup>
-import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
-import { ProductService } from '@/service/ProductService';
+import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import DataTable from 'primevue/datatable';
-
 import { OrdersService } from '@/service/OrdersService';
-const ordersService = new OrdersService(); 
-const toast = useToast();
+import { ProductService } from '@/service/ProductService';
 
+// Services
+const ordersService = new OrdersService();
+const productService = new ProductService();
+
+// Toast and Router
+const toast = useToast();
 const router = useRouter();
-const products = ref(null);
+
+// Reactive References
+const orders = ref([]);
+const selectedOrders = ref(null);
+const products = ref([]);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
@@ -22,15 +29,27 @@ const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 const statuses = ref([
-    { label: 'paid', value: 'Paid' },
-    { label: 'pending', value: 'Pending' },
-    { label: 'unpaid', value: 'Unpaid' }
+    { label: 'Paid', value: 'Paid' },
+    { label: 'Pending', value: 'Pending' },
+    { label: 'Unpaid', value: 'Unpaid' }
 ]);
-const orders = ref([[]]);
 const status = ref(null);
-const selectedOrders = ref(null);
-const productService = new ProductService();
 let calenderValue = ref(null);
+
+// Functions
+const fetchAllOrders = async () => {
+    try {
+        const data = await ordersService.fetchAllOrders();
+        orders.value = data;
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+    }
+};
+
+const formatCurrency = (value) => {
+    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+};
+
 const getBadgeSeverity = (inventoryStatus) => {
     switch (inventoryStatus.toLowerCase()) {
         case 'instock':
@@ -42,29 +61,6 @@ const getBadgeSeverity = (inventoryStatus) => {
         default:
             return 'info';
     }
-};
-
-onBeforeMount(() => {
-    initFilters();
-});
-const fetchAllOrders = async () => {
-    ordersService.fetchAllOrders()
-    .then(data => {
-      console.log("Fetched orders:", data);
-      orders.value = data;
-    })
-    .catch(error => {
-      console.error("Error fetching orders", error);
-    });
-}
-onMounted(() => {
- 
-
-    // productService.getProducts().then((data) => (products.value = data));
-    fetchAllOrders();
-});
-const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
 const openNew = () => {
@@ -87,8 +83,9 @@ const openFilter = () => {
 const clearFilter = () => {
     calenderValue.value = '';
     status.value = '';
-    filters['global'].value = '';
+    filters.value['global'].value = '';
 };
+
 const saveProduct = () => {
     submitted.value = true;
     if (product.value.name && product.value.name.trim() && product.value.price) {
@@ -127,14 +124,7 @@ const deleteProduct = () => {
 };
 
 const findIndexById = (id) => {
-    let index = -1;
-    for (let i = 0; i < products.value.length; i++) {
-        if (products.value[i].id === id) {
-            index = i;
-            break;
-        }
-    }
-    return index;
+    return products.value.findIndex(product => product.id === id);
 };
 
 const createId = () => {
@@ -157,6 +147,7 @@ const exportCSV = () => {
 const confirmDeleteSelected = () => {
     deleteProductsDialog.value = true;
 };
+
 const deleteSelectedProducts = () => {
     products.value = products.value.filter((val) => !selectedProducts.value.includes(val));
     deleteProductsDialog.value = false;
@@ -168,18 +159,18 @@ const initFilters = () => {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
     };
-
-    const formatDate = (value) => {
-    return value.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-};
 };
 
+// Lifecycle Hooks
+onBeforeMount(() => {
+    initFilters();
+});
 
+onMounted(() => {
+    fetchAllOrders();
+});
 </script>
+
 
 <template>
     <div class="grid" :style="{ 'margin-left': '-50px', 'margin-top': '-30px' }">
@@ -240,7 +231,7 @@ const initFilters = () => {
             <div class="card">
                 <DataTable
                     ref="dt"
-                    :value="orders.value"
+                    :value="orders"
                     v-model:selection="selectedOrders"
                     dataKey="id"
                     :paginator="true"
@@ -283,11 +274,8 @@ const initFilters = () => {
                             </div>
                         </div>
                     </template>
-
-                    {{ orders }}
                     <Column field="order_number" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <pre>{{ orders }}</pre>
                             <span class="p-column-title">Order No.</span>
                             {{ slotProps.data.order_number   }}
                         </template>
@@ -332,7 +320,7 @@ const initFilters = () => {
                     <Column field="delivery_date" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery Date</span>
-                            {{ format(slotProps.data.delivery_date) }}    
+                            {{slotProps.data.delivery_date }}    
                         </template>
                     </Column>
                     <Column field="delivery_slot" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:10rem;">
