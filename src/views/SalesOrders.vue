@@ -4,7 +4,8 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import { ProductService } from '@/service/ProductService';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
-
+import { OrdersService } from '@/service/OrdersService';
+const ordersService = new OrdersService(); 
 const toast = useToast();
 
 const router = useRouter();
@@ -23,7 +24,9 @@ const statuses = ref([
     { label: 'pending', value: 'Pending' },
     { label: 'unpaid', value: 'Unpaid' }
 ]);
+const orders = ref([[]]);
 const status = ref(null);
+const selectedOrders = ref(null);
 const productService = new ProductService();
 let calenderValue = ref(null);
 const getBadgeSeverity = (inventoryStatus) => {
@@ -42,9 +45,21 @@ const getBadgeSeverity = (inventoryStatus) => {
 onBeforeMount(() => {
     initFilters();
 });
-
+const fetchAllOrders = async () => {
+      try {
+    
+        console.log("Fetch all orders called...!!", ordersService.fetchAllOrders())
+        const data = await ordersService.fetchAllOrders();
+       
+ orders.value = data;
+ console.log("Orders ", orders)
+  } catch (error) {
+  }
+}
 onMounted(() => {
-    productService.getProducts().then((data) => (products.value = data));
+    // productService.getProducts().then((data) => (products.value = data));
+    // console.log("Products ", product)
+    fetchAllOrders();
 });
 const formatCurrency = (value) => {
     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -151,7 +166,17 @@ const initFilters = () => {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
     };
+
+    const formatDate = (value) => {
+    return value.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
 };
+};
+
+
 </script>
 
 <template>
@@ -213,9 +238,9 @@ const initFilters = () => {
             <div class="card">
                 <DataTable
                     ref="dt"
-                    :value="products"
-                    v-model:selection="selectedProducts"
-                    dataKey="id"
+                    :value="orders.value"
+                    v-model:selection="selectedOrders"
+                    dataKey="order_id"
                     :paginator="true"
                     :rows="10"
                     :filters="filters"
@@ -257,64 +282,66 @@ const initFilters = () => {
                         </div>
                     </template>
 
-                    <Column field="orderNo" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="order_number" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
-                            {{ slotProps.data.code }}
+                            {{ slotProps.data.order_number   }}
                         </template>
                     </Column>
-                    <Column field="customer" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="name" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
                             {{ slotProps.data.name }}
                         </template>
                     </Column>
-                    <Column field="orderDate" header="Order Date" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="order_date" header="Order Date" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-                        </template>
+                            {{ slotProps.data.order_date }}                        </template>
                     </Column>
-                    <Column field="inventoryStatus" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="status" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
-                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.status)">{{ slotProps.data.status }}</Tag>
                         </template>
                     </Column>
-                    <Column field="items" header="Items" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <Column field="items_count" header="Items" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Items</span>
-                            {{ formatCurrency(slotProps.data.price) }}
+                            {{ slotProps.data.items_count }}    
+                            <!-- {{ formatCurrency(slotProps.data.price) }} -->
                         </template>
                     </Column>
                     <Column field="amount" header="Amount" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Amount</span>
-                            {{ slotProps.data.category }}
+                            {{ formatCurrency(slotProps.data.amount || 0) }}
                         </template>
                     </Column>
-                    <Column field="delivery" header="Delivery" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_type" header="Delivery" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            {{ slotProps.data.delivery_type }}    
+                            <!-- <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" /> -->
                         </template>
                     </Column>
-                    <Column field="deliveryDate" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_date" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery Date</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            {{ format(slotProps.data.delivery_date) }}    
                         </template>
                     </Column>
-                    <Column field="deliveryWindow" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_slot" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery Window</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                             {{ slotProps.data.delivery_slot }}    
+                            <!-- <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" /> -->
                         </template>
                     </Column>
-                    <Column field="payment" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_slot" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Payment</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            {{ slotProps.data.delivery_slot }}
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
