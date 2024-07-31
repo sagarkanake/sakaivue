@@ -161,6 +161,15 @@ const initFilters = () => {
     };
 };
 
+function formatDate(dateStr) {
+  const [datePart] = dateStr.split(' ');
+  const [day, month, year] = datePart.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+const showOrderDetails = () => {
+    router.push('/sales/order-details');
+}
 // Lifecycle Hooks
 onBeforeMount(() => {
     initFilters();
@@ -274,24 +283,28 @@ onMounted(() => {
                             </div>
                         </div>
                     </template>
-                    <Column field="order_number" header="Order No." :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="order_number" header="Order No." :sortable="true" headerStyle="width:14%; min-width:11rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
-                            {{ slotProps.data.order_number   }}
+                           
+                            <button @click="showOrderDetails()" class="p-button p-component p-button-text p-button-plain">
+                                {{ slotProps.data.order_number   }}
+                                </button>
+
                         </template>
                     </Column>
-                    <Column field="name" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="name" header="Customer" :sortable="true" headerStyle="width:14%; min-width:13rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
-                            {{ slotProps.data.name }}
+                            {{ slotProps.data.company.name }}
                         </template>
                     </Column>
                     <Column field="order_date" header="Order Date" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            {{ slotProps.data.order_date }}                        </template>
+                            {{ formatDate(slotProps.data.order_date) }}                        </template>
                     </Column>
-                    <Column field="status" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="status" header="Status" :sortable="true" headerStyle="width:14%; min-width:7rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
                             <Tag :severity="getBadgeSeverity(slotProps.data.status)">{{ slotProps.data.status }}</Tag>
@@ -317,13 +330,13 @@ onMounted(() => {
                             <!-- <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" /> -->
                         </template>
                     </Column>
-                    <Column field="delivery_date" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_date" header="Delivery Date" :sortable="true" headerStyle="width:14%; min-width:11rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery Date</span>
-                            {{slotProps.data.delivery_date }}    
+                            {{formatDate(slotProps.data.delivery_date) }}    
                         </template>
                     </Column>
-                    <Column field="delivery_slot" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="delivery_slot" header="Delivery Window" :sortable="true" headerStyle="width:14%; min-width:12rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Delivery Window</span>
                              {{ slotProps.data.delivery_slot }}    
