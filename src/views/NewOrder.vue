@@ -2,7 +2,9 @@
 import { ref, onMounted, onBeforeMount, computed, watch } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { ProductService } from '@/service/ProductService';
+import { OrdersService } from '@/service/OrdersService';
 
+const ordersService = new OrdersService();
 const dropdownItems = ref([
     { name: 'Option 1', code: 'Option 1' },
     { name: 'Option 2', code: 'Option 2' },
@@ -49,6 +51,7 @@ const selectedCustomer = ref(null);
 const today = new Date();
 const calenderValue = ref(today);
 const selectedPaymentType = ref(null);
+const couponCode = ref(null);
 const selectedDeliveryLocation = ref(null);
 const selectedDeliveryMethod = ref(null);
 const selectedDeliveryWindow = ref(null);
@@ -59,6 +62,7 @@ const product = ref({});
 const submitted = ref(false);
 const selectedGradeFilter = ref(null);
 const selectedProducts = ref(null);
+const addedLineItems = ref(null);
 const orderNotes = ref(null);
 const selectedItemsArray = ref([]);
 
@@ -103,15 +107,51 @@ const addNewLineItem = () => {
 };
 
 const addLineItem = () => {
-    console.log('selectedProducts ', selectedProducts);
+    console.log('selectedProducts ', addedLineItems);
     productDialog.value = false;
 };
+
+const createNewOrder =  async () => {
+    console.log("Create new order called")
+    const payloadOld = {
+        'company_id': 1,
+        'delivery_type': 'Delivery',
+        'delivery_date' : '2024-07-25',
+        'delivery_address_id': 1,
+        'delivery_slot': '06:00-09:00',
+        'coupon_id': 'FSGF',
+        'products': [
+        {
+            "product_variant_id" : 1,
+            "order_quantity": 34
+        },
+        {
+            "product_variant_id" : 2,
+            "order_quantity": 15
+        }
+    ]
+    }
+    const payload = {
+        'company_id':  selectedCustomer,
+        'delivery_type': selectedDeliveryMethod,
+        'delivery_date' : deliveryDate,
+        'delivery_address_id': selectedDeliveryLocation || 1,
+        'delivery_slot': selectedDeliveryWindow,
+        'coupon_id': couponCode || '',
+        'products': []
+    }
+    try {
+        const data = await ordersService.createNewOrder(payload);
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+    }
+}
 </script>
 
 <template>
 <div class="flex justify-content-between">
     <h5 :style="{ 'font-size': 'large', 'font-weight': 'bold', 'margin-left': '-2rem' }">New Order</h5>
-    <div :style="{'margin-left': '30px'}"><Button type="button" label="Save Order" icon="pi pi-save" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }"></Button></div>
+    <div :style="{'margin-left': '30px'}"><Button type="button" label="Save Order" icon="pi pi-save" :style="{ 'background-color': '#1E4A35', border: '#1E4A35' }" @click="createNewOrder()"></Button></div>
 
 </div>
     
@@ -192,7 +232,7 @@ const addLineItem = () => {
                 </div>
                 <div :style="{ 'border-top': '2px solid #F6F6F6', 'margin-top': '20px' }"></div>
                 <div class="flex" :style="{ width: '100%', gap: '14px', 'margin-top': '20px' }">
-                    <InputText :style="{ width: '70%', 'border-radius': '14px' }" id="firstname1" type="text" placeholder="Coupon Code" />
+                    <InputText :style="{ width: '70%', 'border-radius': '14px' }" id="firstname1" type="text" placeholder="Coupon Code" v-model="couponCode"/>
                     <button label="Apply coupon" :style="{ width: '30%', 'background-color': '#DFEDDF', border: '0', 'border-radius': '10px' }"><span :style="{ 'font-size': '11px', 'font-weight': 'bold' }">Apply Coupon</span></button>
                 </div>
             </div>
@@ -270,7 +310,7 @@ const addLineItem = () => {
         <div class="card" :style="{ width: '64%', 'margin-top': '-52%', height: 'auto' }">
             <DataTable
                 ref="dt"
-                :value="products"
+                :value="addedLineItems"
                 v-model:selection="selectedProducts"
                 dataKey="id"
                 :paginator="true"
@@ -315,50 +355,50 @@ const addLineItem = () => {
                 </Column>
                 <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Order Date</span>
-                        <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-                    </template>
+                        <span class="p-column-title">Grade</span>
+                        {{ slotProps.data.grade || '-' }}          
+                              </template>
                 </Column>
                 <Column field="unit" header="Unit" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Status</span>
-                        <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
-                    </template>
+                        <span class="p-column-title">Unit</span>
+                        {{ slotProps.data.grade || '-' }}  
+                                        </template>
                 </Column>
                 <Column field="stdWgt" header="Std Wgt(G)" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Items</span>
-                        {{ formatCurrency(slotProps.data.price) }}
+                        <span class="p-column-title">Std Wgt(G)</span>
+                        {{ slotProps.data.std_wt}}
                     </template>
                 </Column>
                 <Column field="invEq" header="INV eq(KG)" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Amount</span>
-                        {{ slotProps.data.category }}
+                        <span class="p-column-title">INV eq(KG)</span>
+                        {{ slotProps.data.inv_eq || '-' }}
                     </template>
                 </Column>
                 <Column field="processing" header="Processing" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Delivery</span>
-                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                    </template>
+                        <span class="p-column-title">processing</span>
+                        {{ slotProps.data.processing || '-'}}
+                                        </template>
                 </Column>
-                <Column field="specificatios" header="specifications" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                <Column field="specificatios" header="Specifications" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Delivery Date</span>
-                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                        <span class="p-column-title">Specifications</span>
+                        {{ slotProps.data.specifications || '-'}}
                     </template>
                 </Column>
                 <Column field="unitCost" header="Unit Cost" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
-                        <span class="p-column-title">Delivery Window</span>
-                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                        <span class="p-column-title">Unit Cost</span>
+                        {{ slotProps.data.unit_cost || '-'}}
                     </template>
                 </Column>
                 <Column field="payment" header="Payment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Payment</span>
-                        <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                        {{ slotProps.data.payment || '-'}}
                     </template>
                 </Column>
                 <Column headerStyle="min-width:10rem;">
@@ -376,7 +416,7 @@ const addLineItem = () => {
                     </div>
                 </template>
                 <div class="card">
-                    <DataTable ref="dt" :value="tableData" v-model:selection="selectedProducts" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
+                    <DataTable ref="dt" :value="tableData" v-model:selection="addedLineItems" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
                         <template #header>
                             <div class="flex justify-content-between" :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
                                 <div>
