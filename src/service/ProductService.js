@@ -1,3 +1,4 @@
+import apiClient from './apiClient';
 export class ProductService {
     getProductsSmall() {
         return fetch('/demo/data/products-small.json', { headers: { 'Cache-Control': 'no-cache' } })
@@ -34,4 +35,9 @@ export class ProductService {
             .then((res) => res.json())
             .then((d) => d.data);
     }
+
+    fetchAllProducts(data){
+        return apiClient.get('/products',data)
+        .then(response => response.data);
+      }
 }

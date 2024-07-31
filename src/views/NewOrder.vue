@@ -5,6 +5,7 @@ import { ProductService } from '@/service/ProductService';
 import { OrdersService } from '@/service/OrdersService';
 
 const ordersService = new OrdersService();
+const productService = new ProductService();
 const dropdownItems = ref([
     { name: 'Option 1', code: 'Option 1' },
     { name: 'Option 2', code: 'Option 2' },
@@ -58,6 +59,7 @@ const selectedDeliveryWindow = ref(null);
 const deliveryDate = ref(null);
 const productDialog = ref(false);
 const products = ref(null);
+const skus = ref([]);
 const product = ref({});
 const submitted = ref(false);
 const selectedGradeFilter = ref(null);
@@ -75,15 +77,9 @@ const tableData = ref([
     { sku: 6, name: 'Apple Crispy Red', grade: '1', available: '200', committed: 5, incoming: 56 }
     // Add more static data as needed
 ]);
-const productService = new ProductService();
 
-onBeforeMount(() => {
-    initFilters();
-});
-onMounted(() => {
-    //  productService.getProducts().then((data) => (products.value = data));
-});
 
+//Functions
 const initFilters = () => {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
@@ -112,25 +108,7 @@ const addLineItem = () => {
 };
 
 const createNewOrder =  async () => {
-    console.log("Create new order called")
-    const payloadOld = {
-        'company_id': 1,
-        'delivery_type': 'Delivery',
-        'delivery_date' : '2024-07-25',
-        'delivery_address_id': 1,
-        'delivery_slot': '06:00-09:00',
-        'coupon_id': 'FSGF',
-        'products': [
-        {
-            "product_variant_id" : 1,
-            "order_quantity": 34
-        },
-        {
-            "product_variant_id" : 2,
-            "order_quantity": 15
-        }
-    ]
-    }
+
     const payload = {
         'company_id':  selectedCustomer,
         'delivery_type': selectedDeliveryMethod,
@@ -146,6 +124,32 @@ const createNewOrder =  async () => {
         console.error("Error fetching orders:", error);
     }
 }
+
+const fetchProducts =  async() => {
+    const data = await productService.fetchAllProducts();
+    // const variations = data.data.map((sku) => sku.variations);
+    // skus.value = variations.flat();
+
+    const variationsWithName = data.data.map(sku => 
+      sku.variations.map(variation => ({
+        ...variation, // Keep existing variation properties
+        name: sku.name // Add the name from the SKU
+      }))
+    ).flat(); // Flatten the array of arrays into a single array
+
+    skus.value = variationsWithName;
+}
+
+// Lifecycle hooks
+onBeforeMount(() => {
+    initFilters();
+});
+onMounted(() => {
+    //  productService.getProducts().then((data) => (products.value = data));
+    fetchProducts();
+});
+
+
 </script>
 
 <template>
@@ -356,19 +360,19 @@ const createNewOrder =  async () => {
                 <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Grade</span>
-                        {{ slotProps.data.grade || '-' }}          
+                        {{ slotProps.data.grade.name || '-' }}          
                               </template>
                 </Column>
                 <Column field="unit" header="Unit" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Unit</span>
-                        {{ slotProps.data.grade || '-' }}  
+                        {{ slotProps.data.unit.name || '-' }}  
                                         </template>
                 </Column>
                 <Column field="stdWgt" header="Std Wgt(G)" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Std Wgt(G)</span>
-                        {{ slotProps.data.std_wt}}
+                        {{ slotProps.data.weight_per_unit}}
                     </template>
                 </Column>
                 <Column field="invEq" header="INV eq(KG)" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -416,7 +420,7 @@ const createNewOrder =  async () => {
                     </div>
                 </template>
                 <div class="card">
-                    <DataTable ref="dt" :value="tableData" v-model:selection="addedLineItems" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
+                    <DataTable ref="dt" :value="skus" v-model:selection="addedLineItems" dataKey="sku" :scrollable="true" scrollHeight="200px" :style="{ 'margin-left': '-20px' }">
                         <template #header>
                             <div class="flex justify-content-between" :style="{ 'margin-top': '-30px', 'margin-left': '-14px' }">
                                 <div>
@@ -433,6 +437,7 @@ const createNewOrder =  async () => {
                         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
                         <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                          
                             <template #body="slotProps">
                                 <span class="p-column-title">SKU</span>
                                 {{ slotProps.data.sku }}
@@ -447,7 +452,7 @@ const createNewOrder =  async () => {
                         <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
                             <template #body="slotProps">
                                 <span class="p-column-title">Grade</span>
-                                {{ slotProps.data.grade }}
+                                {{ slotProps.data.grade.name }}
                             </template>
                         </Column>
                         <Column field="available" header="Available" :sortable="true" headerStyle="width:14%; min-width:10rem;">
