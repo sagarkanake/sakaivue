@@ -36,8 +36,9 @@ const breadcrumbs = computed(() => {
 
 <style scoped>
 .breadcrumb {
-  margin-left: 70px;
+  margin-left: 0px;
 }
+
 
 .breadcrumb-item {
   display: inline-block;

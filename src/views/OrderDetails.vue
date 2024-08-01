@@ -155,7 +155,8 @@ onBeforeMount(() => {
 });
 onMounted(() => {
     orderData = store.state.orders.orderDetailsArray;
-    orderNumber = store.state.orders.orderDetailsArray[0].order_number
+    orderNumber = store.state.orders.orderDetailsArray[0].order_number;
+    console.log("Order Data ", orderData);
     //  productService.getProducts().then((data) => (products.value = data));
     fetchProducts();
 });
@@ -177,8 +178,7 @@ onMounted(() => {
         <div :style="{ width: '64%', 'margin-top': '14px' }">
             <DataTable
                 ref="dt"
-                :value="addedLineItems"
-                v-model:selection="selectedProducts"
+                :value="orderData"
                 dataKey="id"
                 :paginator="true"
                 :rows="10"
@@ -210,13 +210,13 @@ onMounted(() => {
                 <Column field="sku" header="SKU" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Order No.</span>
-                        {{ slotProps.data.code }}
+                        {{ slotProps.data.sku }}
                     </template>
                 </Column>
                 <Column field="item" header="Item" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Customer</span>
-                        {{ slotProps.data.name }}
+                        {{ slotProps.data.item || '-' }}
                     </template>
                 </Column>
                 <Column field="grade" header="Grade" headerStyle="width:14%; min-width:10rem;">
@@ -255,7 +255,7 @@ onMounted(() => {
                         {{ slotProps.data.processing || '-'}}
                                         </template>
                 </Column>
-                <Column field="size" header="size" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                <Column field="size" header="Size" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">processing</span>
                         {{ slotProps.data.processing || '-'}}

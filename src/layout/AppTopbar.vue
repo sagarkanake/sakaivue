@@ -75,22 +75,30 @@ const isOutsideClicked = (event) => {
         <router-link to="/" class="layout-topbar-logo" >
             <img :src="logoUrl" alt="logo" :style="{height: 'auto !important'}"/>
         </router-link>
-
-<div class="col-6">
-            <div>
-                 <Breadcrumb />
+        <div class=" flex w-full ">
+            <div class=" pl-3 flex-1 flex justify-content-start">
+                <Breadcrumb />
             </div>
-        </div>
+            <div class=" pr-3 flex-1 flex justify-content-end ">
+                <div class="layout-topbar-menu" :style="{'align-items':'center'}" :class="topbarMenuClasses">
+                    <button class="p-link layout-menu-button layout-topbar-button"  @click="onMenuToggle()">
+                        <i class="pi pi-bell"></i>
+                    </button>
+                        <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button"  :style="{'margin-left':'0px !important'}">
+                            <i class="pi pi-user"></i>
+                            
+                        </button>
+                        <span class="layout-menu-button" :style="{'margin-left':'0px !important' , 'font-size': '1rem'}">User Name</span>
+                    </div>
+            </div>
+            </div>
+<!-- <div class="col-6"> -->
+            <!-- <div>
+                 <Breadcrumb />
+            </div> -->
+        <!-- </div> -->
     
-        <div class="layout-topbar-menu" :class="topbarMenuClasses">
-        <button class="p-link layout-menu-button layout-topbar-button" :style="{'margin-right': '80px'}" @click="onMenuToggle()">
-            <i class="pi pi-bell"></i>
-        </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button" :style="{'margin-right': '80px'}">
-                <i class="pi pi-user"></i>
-                <span :style="{'font-size': '1rem'}">User Name</span>
-            </button>
-        </div>
+       
     </div>
 </template>
 
