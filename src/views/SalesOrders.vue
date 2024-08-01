@@ -6,10 +6,11 @@ import { useRouter } from 'vue-router';
 import DataTable from 'primevue/datatable';
 import { OrdersService } from '@/service/OrdersService';
 import { ProductService } from '@/service/ProductService';
-
+import { useStore } from 'vuex';
 // Services
 const ordersService = new OrdersService();
 const productService = new ProductService();
+const store = useStore();
 
 // Toast and Router
 const toast = useToast();
@@ -167,8 +168,12 @@ function formatDate(dateStr) {
   return `${day}/${month}/${year}`;
 }
 
-const showOrderDetails = () => {
-    router.push('/sales/order-details');
+const showOrderDetails = (orderData) => {
+    store.dispatch('orders/setOrderDetailsArray', orders)
+    router.push({
+        path: '/sales/order-details',
+        // state: { orderData }
+    });
 }
 // Lifecycle Hooks
 onBeforeMount(() => {
@@ -287,7 +292,7 @@ onMounted(() => {
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
                            
-                            <button @click="showOrderDetails()" class="p-button p-component p-button-text p-button-plain">
+                            <button @click="showOrderDetails(slotProps.data)" class="p-button p-component p-button-text p-button-plain">
                                 {{ slotProps.data.order_number   }}
                                 </button>
 
