@@ -30,7 +30,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
+.vscode
 # Themes
 public/themes/soho-light/
 public/themes/soho-dark/

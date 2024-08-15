@@ -1,5 +1,5 @@
 <template>
-    <FormComponent :initialValues="initialValues" :type="type" :validationSchema="validationSchema" :handleSubmit="handleSubmit" :close="close" />
+    <FormComponent :initialValues="initialValues"  :type="type"  :validationSchema="validationSchema" :handleSubmit="handleSubmit" :close="close" />
 </template>
 
 <script setup>
@@ -14,20 +14,19 @@ defineProps({
         required: true,
     },
 });
-const type = 'add'
 const initialValues = ref({
-      name: '',
-      phone_number: '',
+      name: 'sagar k',
+      phone_number: 1234567890,
       driver_type: { name: '1', label: 'Own' },
-      vehicle: '',
+      vehicle: { name: '1', label: 'Own' },
       code_of_conduct: 'https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg',
       food_handling_certificate: 'https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg',
       drivers_license: 'https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg',
-      food_handling_certificate_expiration_date: '',
-      code_of_conduct_expiration_date: '',
-      drivers_license_expiration_date: '',
+      food_handling_certificate_expiration_date: '14/08/2024',
+      code_of_conduct_expiration_date: '14/08/2024',
+      drivers_license_expiration_date: '14/08/2024',
     })
-
+const type = 'edit'
 // Validation schema
 const validationSchema = yup.object({
     name: yup.string().required('Name is required'),

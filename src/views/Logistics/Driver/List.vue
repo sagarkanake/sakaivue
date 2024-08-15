@@ -1,114 +1,90 @@
-<script>
+<script setup>
 import { useStore } from 'vuex';
 import { computed, ref, onMounted } from 'vue';
-import { PrimeIcons } from 'primevue/api';
 import { useRouter } from 'vue-router';
 import AddDriverFrom from './Add.vue';
 import SampleForm from './SampleForm.vue';
+import EditDriverFrom from './Edit.vue'
+const store = useStore();
+const router = useRouter();
+const display = ref(false);
+const editDisplay = ref(false);
+const loading = ref(true);
 
-export default {
-    name: 'DriverData',
-    components: {
-        AddDriverFrom,
-        SampleForm
+const drivers = computed(() => store.getters['logistics/data']);
+const isLoading = computed(() => store.getters['logistics/loading']);
+const error = computed(() => store.getters['logistics/error']);
+const dt = ref();
+const items = ref([
+    {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => handleMenuItemClick({ label: 'Edit' })
     },
-    setup() {
-        const store = useStore();
-        const router = useRouter();
-        const display = ref(false);
-        const loading = ref(true);
+    {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => handleMenuItemClick({ label: 'Delete' })
+    }
+    // Add more items here
+]);
 
-        const drivers = computed(() => store.getters['logistics/data']);
-        const isLoading = computed(() => store.getters['logistics/loading']);
-        const error = computed(() => store.getters['logistics/error']);
+const handleMenuItemClick = (item) => {
+    console.log(`Menu item clicked: ${item.label}`);
+    if(item.label == 'Edit'){
+        editOpen()
+    }
+    // Add your custom logic here
+};
 
-        const items = ref([
-            {
-                label: 'Edit',
-                icon: 'pi pi-pencil',
-                command: () => handleMenuItemClick({ label: 'Edit' })
-            },
-            {
-                label: 'Delete',
-                icon: 'pi pi-trash',
-                command: () => handleMenuItemClick({ label: 'Delete' })
-            }
-            // Add more items here
-        ]);
-        const handleMenuItemClick = (item) => {
-            console.log(`Menu item clicked: ${item.label}`);
-            // Add your custom logic here
-        }
+function exportCSV() {
+    dt.value.exportCSV();
+}
 
-        const fetchDriversData = async () => {
-            try {
-                console.log('api call')
-                await store.dispatch('logistics/fetchDriversData');
-            } catch (err) {
-                console.error('Error fetching data:', err);
-            } finally {
-                loading.value = false;
-            }
-        };
+const fetchDriversData = async () => {
+    try {
+        console.log('api call');
+        await store.dispatch('logistics/fetchDriversData');
+    } catch (err) {
+        console.error('Error fetching data:', err);
+    } finally {
+        loading.value = false;
+    }
+};
 
-        onMounted(() => {
-            // if (props.initialValues.food_handling_certificate) {
-            //     food_handling_certificate_file_name.value = props.initialValues.food_handling_certificate.name;
-            //     food_handling_certificate_file_data.value = props.initialValues.food_handling_certificate;
-            // }
+onMounted(() => {
+    fetchDriversData();
+});
 
-            // if (props.initialValues.drivers_license) {
-            //     drivers_license_file_name.value = props.initialValues.drivers_license.name;
-            //     drivers_license_file_data.value = props.initialValues.drivers_license;
-            // }
+const open = () => {
+    display.value = true;
+};
 
-            // if (props.initialValues.code_of_conduct) {
-            //     code_of_conduct_file_name.value = props.initialValues.code_of_conduct.name;
-            //     code_of_conduct_file_data.value = props.initialValues.code_of_conduct;
-            // }
-            fetchDriversData()
-        });
+const editOpen = () => {
+    editDisplay.value = true;
+};
 
-        // onMounted(fetchDriversData);
+const close = () => {
+    display.value = false;
+};
 
-        const open = () => {
-            display.value = true;
-        };
+const editClose = () => {
+    editDisplay.value = false;
+};
 
-        const close = () => {
-            display.value = false;
-        };
 
-        const navigateTo = (path) => {
-            console.log(`Navigating to ${path}`);
-            router.push(path); // Navigate to the specified path
-        };
-        const handleClick = (event) => {
-            console.log('Button clicked:', event);
-            // Toggle the menu visibility
-            const menu = $refs.menu2;
-            if (menu) {
-                menu.toggle(event);
-            }
-        };
-        // const handleMenuItemClick = (event) => {
-        //     console.log('Menu item clicked:', event.item);
-        //     // event.item will be the clicked item from the items array
-        //     console.log('Item ID:', event.item.id); // Log the ID of the clicked item
-        // };
+const navigateTo = (path) => {
+    console.log(`Navigating to ${path}`);
+    router.push(path); // Navigate to the specified path
+};
 
-        return {
-            display,
-            open,
-            close,
-            drivers,
-            isLoading,
-            navigateTo,
-            items,
-            handleClick,
-            handleMenuItemClick
-        };
-    },
+const handleClick = (event) => {
+    console.log('Button clicked:', event);
+    // Toggle the menu visibility
+    const menu = $refs.menu2;
+    if (menu) {
+        menu.toggle(event);
+    }
 };
 </script>
 <template>
@@ -120,7 +96,7 @@ export default {
                 <InputIcon class="pi pi-search" />
             </IconField>
             <div class="flex-col ">
-                <Button label="Export" icon="pi pi-file-export" class=" flex-1 mr-2 mb-2"></Button>
+                <Button label="Export" icon="pi pi-file-export" @click="exportCSV($event)"  class=" flex-1 mr-2 mb-2"></Button>
                 <Button @click="open" label="Add Driver" icon="pi pi-plus"
                     class=" custom-green-900-button  flex-1  mr-2 mb-2"></Button>
 
@@ -130,14 +106,23 @@ export default {
         <div>
             <Dialog class=" h-full " header="Add Driver" v-model:visible="display" :breakpoints="{ '960px': '75vw' }"
                 :style="{ width: '70vw', height: '70vw' }" :modal="true">
-                <!-- <AddDriverFrom :close="close"></AddDriverFrom> -->
-                <SampleForm :close="close" />
+                <AddDriverFrom :close="close"></AddDriverFrom> 
+                
 
                 <!-- <template #footer>
                     <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
                 </template> -->
             </Dialog>
-            <DataTable :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
+            <Dialog class=" h-full " header="Edit Driver" v-model:visible="editDisplay " :breakpoints="{ '960px': '75vw' }"
+                :style="{ width: '70vw', height: '70vw' }" :modal="true">
+                <EditDriverFrom :close="editClose"></EditDriverFrom> 
+                
+
+                <!-- <template #footer>
+                    <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
+                </template> -->
+            </Dialog>
+            <DataTable  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"  ref="dt" :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
                 <Column field="id" header="Id" :sortable="false">
                     <template #body="slotProps">
                         {{ slotProps.data.id }}
