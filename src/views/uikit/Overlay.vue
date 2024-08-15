@@ -71,6 +71,9 @@ const confirm = (event) => {
         }
     });
 };
+export default {
+    
+}
 </script>
 
 <template>

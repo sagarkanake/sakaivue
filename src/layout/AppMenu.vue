@@ -4,42 +4,55 @@ import { ref } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
-{
-     items: [
-            {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
-            { label: 'Sales',icon: 'pi pi-shopping-bag',
+    {
         items: [
-            { label: 'Orders', icon: 'pi pi-circle-fill',style : "font-size: 1rem", to: '/sales/orders' },
-            { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/sales/invoices'},
-            { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/sales/rejects' },
-            { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', to: '/sales/flash-sales'},
-            { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/sales/coupons' },
-            { label: 'Customers', icon: 'pi pi-fw pi-desktop', to: '/sales/customers'},
-            { label: 'Lead', icon: 'pi pi-fw pi-prime', to: '/sales/leads' },
-            { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
-            { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-        ] },
-         { label: 'Inventory',
-        items: [
-            { label: 'Products', icon: 'pi pi-fw pi-prime', style:"font-size: 1rem", to: '/uikit/table' },
-            { label: 'Pricing', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-            { label: 'Customer Pricing', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
-            { label: 'Real Time Inventory', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-            { label: 'Forecasting', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
-            { label: 'Deductions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-            { label: 'Stock Movement', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
-            { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-            { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
-            { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table'},
-        ] },
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            {
+                label: 'Sales', icon: 'pi pi-shopping-bag',
+                items: [
+                    { label: 'Orders', icon: 'pi pi-circle-fill', style: "font-size: 1rem", to: '/sales/orders' },
+                    { label: 'Invoices', icon: 'pi pi-circle-fill', to: '/sales/invoices' },
+                    { label: 'Rejects', icon: 'pi pi-fw pi-prime', to: '/sales/rejects' },
+                    { label: 'Flash Sales', icon: 'pi pi-fw pi-desktop', to: '/sales/flash-sales' },
+                    { label: 'Coupons', icon: 'pi pi-fw pi-prime', to: '/sales/coupons' },
+                    { label: 'Customers', icon: 'pi pi-fw pi-desktop', to: '/sales/customers' },
+                    { label: 'Lead', icon: 'pi pi-fw pi-prime', to: '/sales/leads' },
+                    { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                    { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+                    { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                ]
+            },
+            {
+                label: 'Inventory',
+                items: [
+                    { label: 'Products', icon: 'pi pi-fw pi-prime', style: "font-size: 1rem", to: '/uikit/table' },
+                    { label: 'Pricing', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                    { label: 'Customer Pricing', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+                    { label: 'Real Time Inventory', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                    { label: 'Forecasting', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+                    { label: 'Deductions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                    { label: 'Stock Movement', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+                    { label: 'Commissions', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                    { label: 'Commissions - Admin', icon: 'pi pi-fw pi-prime', to: '/uikit/table' },
+                    { label: 'Feedback', icon: 'pi pi-fw pi-desktop', url: '/uikit/table' },
+                ]
+            },
+            {
+                label: 'Logistics', icon: 'pi pi-shopping-bag',
+                items: [
+                    { label: 'Driver', icon: 'pi pi-circle-fill', style: "font-size: 1rem", to: '/logistics/drivers' },
+                    { label: 'Vehicles', icon: 'pi pi-circle-fill', to: '/logistics/vehicles' },
+                    { label: 'Mileage', icon: 'pi pi-fw pi-prime',to: '/logistics/mileage'},
+                    { label: "PODs", icon: 'pi pi-fw pi-desktop',to: '/logistics/pods' },
+                ]
+            },
+
             { label: 'Sourcing', icon: 'pi pi-fw pi-bookmark', to: '/uikit/table' },
             { label: 'Dispatch', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/table' },
-            { label: 'Logistics', icon: 'pi pi-fw pi-mobile', to: '/uikit/table', class: 'rotated-icon' },
             { label: 'Finance', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
             { label: 'Users', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
         ]
-},
+    },
 ]);
 </script>
 
@@ -58,8 +71,7 @@ const model = ref([
 </template>
 
 <style lang="scss" scoped>
-
 .large-icon .pi {
-  font-size: 24px;
+    font-size: 24px;
 }
 </style>

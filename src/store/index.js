@@ -2,12 +2,14 @@
 import { createStore } from 'vuex';
 import { AuthService } from '../service/AuthService';
 import orders from './modules/Orders';
+import logistics from './modules/Logistics';
 const store = createStore({
   state: {
     token: null,
   },
   modules: {
     orders,
+    logistics
   },
   mutations: {
     setToken(state, token) {

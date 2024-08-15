@@ -12,6 +12,45 @@ const routes = [
         component: () => import('@/views/Dashboard.vue')
       },
       {
+        path: 'logistics',
+        meta: { breadcrumb: 'Logistics' },
+        children: [
+          {
+            path: 'drivers',
+            name: 'logistics-drivers',
+            component: () => import('@/views/Logistics/Driver/List.vue'),
+            meta: { breadcrumb: 'Drivers' },
+          },
+          {
+            path: 'vehicles',
+            name: 'logistics-vehicles',
+            component: () => import('@/views/Logistics/Vehicles/List.vue'),
+            meta: { breadcrumb: 'Vehicles' },
+          },
+          {
+            path: 'mileage',
+            name: 'logistics-mileage',
+            component: () => import('@/views/Logistics/Mileage/List.vue'),
+            meta: { breadcrumb: 'Mileage' },
+          },
+          {
+            path: 'pods',
+            name: 'logistics-pods',
+            component: () => import('@/views/Logistics/PODs/List.vue'),
+            meta: { breadcrumb: 'PODs' },
+          },
+          {
+            path: 'driversAdd',
+            name: 'logistics-driversAdd',
+            component: () => import('@/views/Logistics/Driver/Add.vue'),
+            meta: { breadcrumb: 'Drivers > Add' }
+          }
+          
+         
+        ]
+      },
+     
+      {
         path: 'sales',
         meta: { breadcrumb: 'Sales' },
         children: [
@@ -86,6 +125,12 @@ const routes = [
           
           // Add more Sales child routes here
         ]
+      },
+    
+      {
+        path: 'uikit/formlayout',
+        name: 'Logistics',
+        component: () => import('@/views/uikit/FormLayout.vue')
       },
       {
         path: 'uikit/formlayout',

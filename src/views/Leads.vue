@@ -28,10 +28,10 @@ const productService = new ProductService();
 let calenderValue = ref(null);
 const visibleRight = ref(false);
 const items = ref([
-{ label: 'View', icon: 'pi pi-fw pi-eye', command: () => handleMenuAction('Edit') },
+    { label: 'View', icon: 'pi pi-fw pi-eye', command: () => handleMenuAction('Edit') },
     { label: 'Edit', icon: 'pi pi-fw pi-plus', command: () => handleMenuAction('Edit') },
     { label: 'Delete Coupon', icon: 'pi pi-fw pi-trash', command: () => handleMenuAction('Delete'), style: { color: 'red' } }
-    
+
 ]);
 const getBadgeSeverity = (inventoryStatus) => {
     switch (inventoryStatus.toLowerCase()) {
@@ -172,8 +172,8 @@ const handleMenuAction = (action, item) => {
 
 <template>
     <div class="grid" :style="{ 'margin-left': '-50px', 'margin-top': '-30px' }">
-               
-               <div class="col-12 lg:col-3 xl:col-3">
+
+        <div class="col-12 lg:col-3 xl:col-3">
             <div class="card mb-0 p-0" :style="{ height: 'calc(110% + 5px)' }">
                 <div class="flex justify-content-between mb-2 ml-2 mt-2">
                     <div>
@@ -181,7 +181,8 @@ const handleMenuAction = (action, item) => {
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
-                <Badge severity="danger" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89%</Badge>
+                <Badge severity="danger" class="ml-2 mt--2"> <i class="pi pi-arrow-down"
+                        :style="{ 'font-size': 'smaller' }"></i> 12.89%</Badge>
                 <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
             </div>
         </div>
@@ -194,7 +195,8 @@ const handleMenuAction = (action, item) => {
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
-                <Badge severity="success" class="ml-2 mt--2"> <i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <Badge severity="success" class="ml-2 mt--2"> <i class="pi pi-arrow-down"
+                        :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
                 <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
             </div>
         </div>
@@ -207,7 +209,8 @@ const handleMenuAction = (action, item) => {
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
-                <Badge severity="info" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <Badge severity="info" class="ml-2 mt--2"><i class="pi pi-arrow-down"
+                        :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
                 <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
             </div>
         </div>
@@ -220,27 +223,22 @@ const handleMenuAction = (action, item) => {
                         <div class="text-xl font-bold mt--0">1234</div>
                     </div>
                 </div>
-                <Badge severity="warning" class="ml-2 mt--2"><i class="pi pi-arrow-down" :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
+                <Badge severity="warning" class="ml-2 mt--2"><i class="pi pi-arrow-down"
+                        :style="{ 'font-size': 'smaller' }"></i> 12.89% </Badge>
                 <span class="text-400" :style="{ 'font-size': '12px' }"> vs last months : 1200</span>
             </div>
         </div>
 
         <div class="col-12">
             <div class="card">
-                <DataTable
-                    ref="dt"
-                    :value="products"
-                    v-model:selection="selectedProducts"
-                    dataKey="id"
-                    :paginator="true"
-                    :rows="10"
-                    :filters="filters"
+                <DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id"
+                    :paginator="true" :rows="10" :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                >
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
                     <template #header>
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center" :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+                            :style="{ 'margin-top': '-20px', 'margin-left': '-15px' }">
                             <h5 class="m-0">Leads</h5>
                         </div>
                         <div class="flex justify-content-between gap-6 mt-2" :style="{ 'margin-left': '-15px' }">
@@ -248,15 +246,18 @@ const handleMenuAction = (action, item) => {
                                 <div>
                                     <IconField iconPosition="left" class="block mt-2 md:mt-0">
                                         <InputIcon class="pi pi-search" />
-                                        <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                                        <InputText class="w-full sm:w-auto" v-model="filters['global'].value"
+                                            placeholder="Search..." />
                                     </IconField>
                                 </div>
                                 <div>
                                     <!-- <label for="state">Status</label> -->
-                                    <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value" placeholder="Select Status"></Dropdown>
+                                    <Dropdown id="state" v-model="status" :options="statuses" optionLabel="value"
+                                        placeholder="Select Status"></Dropdown>
                                 </div>
                                 <div>
-                                    <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined @click="openFilter()" />
+                                    <Button type="button" icon="pi pi-filter-fill" label="Filter" outlined
+                                        @click="openFilter()" />
                                 </div>
                                 <div>
                                     <Button type="button" icon="pi pi-filter-slash" outlined @click="clearFilter()" />
@@ -264,21 +265,28 @@ const handleMenuAction = (action, item) => {
                             </div>
 
                             <div class="flex gap-2" :style="{ 'margin-right': '-22px' }">
-                                <Button type="button" label="Export" icon="pi pi-file-export" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9','color':'#122C20' }" @click="exportCSV($event)"></Button>
-                                <Button type="button" label="New Lead" icon="pi pi-plus" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="newOrder()"></Button>
+                                <Button type="button" label="Export" icon="pi pi-file-export"
+                                    :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9', 'color': '#122C20' }"
+                                    @click="exportCSV($event)"></Button>
+                                <Button type="button" label="New Lead" icon="pi pi-plus"
+                                    :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }"
+                                    @click="newOrder()"></Button>
                             </div>
                         </div>
                     </template>
 
-                    <Column field="customer" header="Customer" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="customer" header="Customer" :sortable="true"
+                        headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order No.</span>
-                            <button @click="visibleRight = true" class="p-button p-component p-button-text p-button-plain">
+                            <button @click="visibleRight = true"
+                                class="p-button p-component p-button-text p-button-plain">
                                 {{ slotProps.data.code }}
-                              </button>
+                            </button>
                         </template>
                     </Column>
-                    <Column field="category" header="Category" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="category" header="Category" :sortable="true"
+                        headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Customer</span>
                             {{ slotProps.data.name }}
@@ -287,72 +295,87 @@ const handleMenuAction = (action, item) => {
                     <Column field="contactPerson" header="Contact Person" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
                     <Column field="phoneNumber" header="Phone Number" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
                     <Column field="email" header="Email" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    
+
                     <Column field="contactDate" header="Contact Date" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
                     <Column field="lastContact" header="Last Contact" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    <Column field="inventoryStatus" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="inventoryStatus" header="Status" :sortable="true"
+                        headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Status</span>
-                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{ slotProps.data.inventoryStatus }}</Tag>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.inventoryStatus)">{{
+                                slotProps.data.inventoryStatus }}</Tag>
                         </template>
                     </Column>
                     <Column field="source" header="Source" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
                     <Column field="dealOpp" header="Deal Oppurtunity" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
                     <Column field="owner" header="Owner" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Order Date</span>
-                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <img :src="'/demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image"
+                                class="shadow-2" width="100" />
                         </template>
                     </Column>
-                    
+
                     <Column headerStyle="min-width:10rem;">
                         <template #body="slotProps">
-                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded" @click="$refs.menu2.toggle($event)"></Button>
-                            <Menu ref="menu2" :popup="true" :model="items" @click="handleMenuAction($event, slotProps)"></Menu>
+                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
+                                @click="$refs.menu2.toggle($event)"></Button>
+                            <Menu ref="menu2" :popup="true" :model="items" @click="handleMenuAction($event, slotProps)">
+                            </Menu>
                         </template>
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
-                    <img :src="'/demo/images/product/' + product.image" :alt="product.image" v-if="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
+                <Dialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Product Details"
+                    :modal="true" class="p-fluid">
+                    <img :src="'/demo/images/product/' + product.image" :alt="product.image" v-if="product.image"
+                        width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
                     <div class="field">
                         <label for="name">Name</label>
-                        <InputText id="name" v-model.trim="product.name" required="true" autofocus :invalid="submitted && !product.name" />
+                        <InputText id="name" v-model.trim="product.name" required="true" autofocus
+                            :invalid="submitted && !product.name" />
                         <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
                     </div>
                     <div class="field">
@@ -362,13 +385,16 @@ const handleMenuAction = (action, item) => {
 
                     <div class="field">
                         <label for="inventoryStatus" class="mb-3">Inventory Status</label>
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select a Status">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses"
+                            optionLabel="value" placeholder="Select a Status">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{
+                                        slotProps.value.label }}</span>
                                 </div>
                                 <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{
+                                        slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -381,19 +407,23 @@ const handleMenuAction = (action, item) => {
                         <label class="mb-3">Category</label>
                         <div class="formgrid grid">
                             <div class="field-radiobutton col-6">
-                                <RadioButton id="category1" name="category" value="Accessories" v-model="product.category" />
+                                <RadioButton id="category1" name="category" value="Accessories"
+                                    v-model="product.category" />
                                 <label for="category1">Accessories</label>
                             </div>
                             <div class="field-radiobutton col-6">
-                                <RadioButton id="category2" name="category" value="Clothing" v-model="product.category" />
+                                <RadioButton id="category2" name="category" value="Clothing"
+                                    v-model="product.category" />
                                 <label for="category2">Clothing</label>
                             </div>
                             <div class="field-radiobutton col-6">
-                                <RadioButton id="category3" name="category" value="Electronics" v-model="product.category" />
+                                <RadioButton id="category3" name="category" value="Electronics"
+                                    v-model="product.category" />
                                 <label for="category3">Electronics</label>
                             </div>
                             <div class="field-radiobutton col-6">
-                                <RadioButton id="category4" name="category" value="Fitness" v-model="product.category" />
+                                <RadioButton id="category4" name="category" value="Fitness"
+                                    v-model="product.category" />
                                 <label for="category4">Fitness</label>
                             </div>
                         </div>
@@ -402,7 +432,8 @@ const handleMenuAction = (action, item) => {
                     <div class="formgrid grid">
                         <div class="field col">
                             <label for="price">Price</label>
-                            <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :invalid="submitted && !product.price" :required="true" />
+                            <InputNumber id="price" v-model="product.price" mode="currency" currency="USD"
+                                locale="en-US" :invalid="submitted && !product.price" :required="true" />
                             <small class="p-invalid" v-if="submitted && !product.price">Price is required.</small>
                         </div>
                         <div class="field col">
@@ -416,13 +447,11 @@ const handleMenuAction = (action, item) => {
                     </template>
                 </Dialog>
 
-                <Dialog v-model:visible="deleteProductDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                <Dialog v-model:visible="deleteProductDialog" :style="{ width: '450px' }" header="Confirm"
+                    :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                        <span v-if="product"
-                            >Are you sure you want to delete <b>{{ product.name }}</b
-                            >?</span
-                        >
+                        <span v-if="product">Are you sure you want to delete <b>{{ product.name }}</b>?</span>
                     </div>
                     <template #footer>
                         <Button label="No" icon="pi pi-times" text @click="deleteProductDialog = false" />
@@ -430,7 +459,8 @@ const handleMenuAction = (action, item) => {
                     </template>
                 </Dialog>
 
-                <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Confirm"
+                    :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="product">Are you sure you want to delete the selected products?</span>
@@ -446,19 +476,23 @@ const handleMenuAction = (action, item) => {
                         <div class="p-d-flex p-ai-center">
                             <span class="pi pi-filter p-mr-1" style="color: darkgreen; font-weight: 700"></span>
                             <!-- PrimeIcons class for the filter icon with custom color -->
-                            <span class="p-ml-n6" style="color: darkgreen; font-weight: 700; font-size: larger"> More Filters</span>
+                            <span class="p-ml-n6" style="color: darkgreen; font-weight: 700; font-size: larger"> More
+                                Filters</span>
                             <!-- PrimeFlex classes for margin-left and bold text -->
                         </div>
                     </template>
 
                     <div class="field">
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Payment Status">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses"
+                            optionLabel="value" placeholder="Select Payment Status">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{
+                                        slotProps.value.label }}</span>
                                 </div>
                                 <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{
+                                        slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -468,13 +502,16 @@ const handleMenuAction = (action, item) => {
                     </div>
 
                     <div class="field">
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Customer">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses"
+                            optionLabel="value" placeholder="Select Customer">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{
+                                        slotProps.value.label }}</span>
                                 </div>
                                 <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{
+                                        slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -483,16 +520,21 @@ const handleMenuAction = (action, item) => {
                         </Dropdown>
                     </div>
                     <div class="field">
-                        <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false" placeholder="Select Delivery Date"></Calendar>
+                        <Calendar v-model="calenderValue" selectionMode="range" :manualInput="false"
+                            placeholder="Select Delivery Date">
+                        </Calendar>
                     </div>
                     <div class="field">
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="value" placeholder="Select Delivery Window">
+                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses"
+                            optionLabel="value" placeholder="Select Delivery Window">
                             <template #value="slotProps">
                                 <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.value">{{
+                                        slotProps.value.label }}</span>
                                 </div>
                                 <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{
+                                        slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -501,106 +543,108 @@ const handleMenuAction = (action, item) => {
                         </Dropdown>
                     </div>
                     <template #footer>
-                        <Button type="button" label="Cancel" icon="pi pi-times" :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
-                        <Button type="button" label="Save" icon="pi pi-check" :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
+                        <Button type="button" label="Cancel" icon="pi pi-times"
+                            :style="{ 'background-color': '#C8E6C9', border: '#C8E6C9' }" @click="hideDialog" />
+                        <Button type="button" label="Save" icon="pi pi-check"
+                            :style="{ 'background-color': 'darkgreen', border: 'darkgreen' }" @click="saveProduct" />
                     </template>
                 </Dialog>
             </div>
         </div>
         <Sidebar v-model:visible="visibleRight" :baseZIndex="1000" position="right" :style="{ width: '400px' }">
             <template #header>
-            <h5 class="flex" style="font-weight: 700;color:#122C20">LSG Sky Chef</h5>
-            <span :style="{'color':'#808080','margin-left': '-99%','margin-top':'30px'}"> Victor Mutinda</span>
+                <h5 class="flex" style="font-weight: 700;color:#122C20">LSG Sky Chef</h5>
+                <span :style="{ 'color': '#808080', 'margin-left': '-99%', 'margin-top': '30px' }"> Victor Mutinda</span>
             </template>
             <div :style="{ 'margin-top': '-5px' }">
-        <h5 style="font-weight: 700;color:#122C20" >Business Details</h5>
-        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Business Name</div>
-                <div>LSG Sky Chef</div>
+                <h5 style="font-weight: 700;color:#122C20">Business Details</h5>
+                <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Business Name</div>
+                        <div>LSG Sky Chef</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Category</div>
+                        <div>School</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
+                        <div>jonkamau@gmail.com</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                        <div>9087676357</div>
+                    </div>
+                    <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                </div>
+                <h5 style="font-weight: 700;color:#122C20">Contact Details</h5>
+                <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
+                        <div>LSG Sky Chef</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
+                        <div>jonkamau@gmail.com</div>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
+                        <div>9087676357</div>
+                    </div>
+                    <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                    <h5 style="font-weight: 700;color:#122C20">Status</h5>
+                    <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
+                            <div>29/07/2024</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
+                            <div>29/07/2024m</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
+                            <div>Onboarding</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
+                            <div>Cold Call</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
+                            <div>Medium</div>
+                        </div>
+                        <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                    </div>
+                    <h5 style="font-weight: 700;color:#122C20">Updates</h5>
+                    <span :style="{ 'font-color': '#F6F6F6' }"> 06 July 24</span>
+                    <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
+                            <div>29/07/2024</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
+                            <div>29/07/2024m</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
+                            <div>Onboarding</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
+                            <div>Cold Call</div>
+                        </div>
+                        <div class="flex justify-content-between">
+                            <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
+                            <div>Medium</div>
+                        </div>
+                        <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
+                    </div>
+                </div>
             </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Category</div>
-                <div>School</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
-                <div>jonkamau@gmail.com</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
-                <div>9087676357</div>
-            </div>
-            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
-        </div>
-        <h5 style="font-weight: 700;color:#122C20">Contact Details</h5>
-        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Contact Person</div>
-                <div>LSG Sky Chef</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Email</div>
-                <div>jonkamau@gmail.com</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Phone</div>
-                <div>9087676357</div>
-            </div>
-            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
-            <h5 style="font-weight: 700;color:#122C20">Status</h5>
-        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
-                <div>29/07/2024</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
-                <div>29/07/2024m</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
-                <div>Onboarding</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
-                <div>Cold Call</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
-                <div>Medium</div>
-            </div>
-            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
-        </div>
-        <h5 style="font-weight: 700;color:#122C20">Updates</h5>
-        <span :style="{'font-color': '#F6F6F6'}"> 06 July 24</span>
-        <div :style="{ display: 'flex', 'flex-direction': 'column', gap: '16px' }">
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Contact Date</div>
-                <div>29/07/2024</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Last Contact</div>
-                <div>29/07/2024m</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Stage</div>
-                <div>Onboarding</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Source</div>
-                <div>Cold Call</div>
-            </div>
-            <div class="flex justify-content-between">
-                <div :style="{ 'font-color': '#F6F6F6' }">Deal Opportunity</div>
-                <div>Medium</div>
-            </div>
-            <div :style="{ 'border-top': '2px solid #E2E8F0', 'margin-top': '20px' }"></div>
-        </div>
-        </div>
-    </div>
         </Sidebar>
-   
+
     </div>
 
 </template>
