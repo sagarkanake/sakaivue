@@ -14,26 +14,36 @@ const loading = ref(true);
 const drivers = computed(() => store.getters['logistics/data']);
 const isLoading = computed(() => store.getters['logistics/loading']);
 const error = computed(() => store.getters['logistics/error']);
+const selected_driver = computed(() => store.getters['logistics/selected_driver']);
+
 const dt = ref();
-const items = ref([
+console.log( 'drivers', drivers ,'selected_driver', selected_driver)
+
+const getItems = (rowData) => {
+    console.log('rowData')
+
+    return [
     {
         label: 'Edit',
         icon: 'pi pi-pencil',
-        command: () => handleMenuItemClick({ label: 'Edit' })
+        command: () => handleMenuItemClick({ label: 'Edit' }, rowData)
     },
     {
         label: 'Delete',
         icon: 'pi pi-trash',
-        command: () => handleMenuItemClick({ label: 'Delete' })
+        command: () => handleMenuItemClick({ label: 'Delete' } , rowData)
     }
     // Add more items here
-]);
+]};
 
-const handleMenuItemClick = (item) => {
-    console.log(`Menu item clicked: ${item.label}`);
+const handleMenuItemClick = async (item, rowData) => {
+    console.log(`Menu item clicked: ${item.label}` , rowData);
+    console.log( 'drivers', drivers ,'selected_driver', selected_driver)
+
     if(item.label == 'Edit'){
         editOpen()
     }
+    await store.dispatch('logistics/setSelectedDriver',[rowData]);
     // Add your custom logic here
 };
 
@@ -122,7 +132,7 @@ const handleClick = (event) => {
                     <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
                 </template> -->
             </Dialog>
-            <DataTable  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"  ref="dt" :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
+            <DataTable  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" :loading="loading" ref="dt" :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
                 <Column field="id" header="Id" :sortable="false">
                     <template #body="slotProps">
                         {{ slotProps.data.id }}
@@ -171,7 +181,7 @@ const handleClick = (event) => {
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="$refs.menu2.toggle($event)"></Button>
-                            <Menu ref="menu2" :popup="true" :model="items" class="!min-w-40">
+                            <Menu ref="menu2" :popup="true" :model="getItems(slotProps.data)" class="!min-w-40">
                             </Menu>
                         </div>
                         <!-- <Button icon="pi pi-trash" class="mt-2" severity="warning" rounded @click="confirmDeleteProduct(slotProps.data)" /> -->

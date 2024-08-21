@@ -4,7 +4,7 @@ export class LogisticsService{
 
     // Fetch all drivers
     fetchAllDrivers(){
-        return apiClient.get('https://jsonplaceholder.typicode.com/users')
+        return apiClient.get('/drivers')
       .then(response => response.data);
     }
     fetchAllVehicles(){

@@ -10,6 +10,7 @@ export default {
     vehicles_data: null,
     vehicles_loading: false,
     vehicles_error: null,
+    selected_driver : null
   }),
   mutations: {
     FETCH_DATA_REQUEST(state) {
@@ -36,6 +37,10 @@ export default {
       state.vehicles_loading = false;
       state.vehicles_error = error;
     },
+    SET_SELECTED_DRIVER(state, driver) {
+      console.log('called', driver)
+      state.selected_driver = driver;
+    },
   },
   actions: {
     
@@ -45,13 +50,20 @@ export default {
       
         const data = await new LogisticsService().fetchAllVehicles();
         // const data = await response.json();
-        console.log('Data fetched:', data);
-        commit('FETCH_DATA_VEHICLES_SUCCESS',  data.map(user => ({
+        console.log('Data vehicles fetched:', data);
+        commit('FETCH_DATA_VEHICLES_SUCCESS',  data.data.map(user => ({
             id: user.id,
             name: user.name,
-            phone_number: user.phone,
+            registration_number: user.registration_number,
+            phone_number: user.phone || '1234567890',
+            driver : user.driver.user.name,
             type: 'own',
+            rates : user.rates || 'Weekly',
             vehicles: 'KAX 200K',
+            status : user.status,
+            owner: user.owner || 'sagar k',
+            vehicle_type : user.vehicle_type || '-',
+            lease_cost : user.lease_cost || 'KSH 0.00',
             code_of_conduct: 'Valid',
             driver_license: 'Expired',
             food_handling_certificates: 'Expired',
@@ -67,12 +79,12 @@ export default {
         const data = await new LogisticsService().fetchAllDrivers();
         // const data = await response.json();
         console.log('Data fetched:', data);
-        commit('FETCH_DATA_SUCCESS',  data.map(user => ({
+        commit('FETCH_DATA_SUCCESS',  data.data.map(user => ({
             id: user.id,
-            name: user.name,
-            phone_number: user.phone,
-            type: 'own',
-            vehicles: 'KAX 200K',
+            name: user.user.name,
+            phone_number: user.phone || '1234567890',
+            type: user.type,
+            vehicles: user.vehicle.registration_number,
             code_of_conduct: 'Valid',
             driver_license: 'Expired',
             food_handling_certificates: 'Expired',
@@ -80,6 +92,10 @@ export default {
       } catch (error) {
         commit('FETCH_DATA_FAILURE', error.message);
       }
+    },
+    async setSelectedDriver({ commit }, driver) {
+      console.log('SET_SELECTED_DRIVER', driver)
+      commit('SET_SELECTED_DRIVER', driver);
     },
   },
   getters: {
@@ -93,13 +109,16 @@ export default {
       return state.error;
     },
     vehicles_data(state) {
-      return state.data;
+      return state.vehicles_data;
     },
     vehicles_loading(state) {
-      return state.loading;
+      return state.vehicles_loading;
     },
     vehicles_error(state) {
-      return state.error;
+      return state.vehicles_error;
+    },
+    selected_driver(state) {
+      return state.selected_driver;
     },
   },
 };

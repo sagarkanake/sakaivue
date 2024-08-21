@@ -38,6 +38,7 @@ export default {
             { name: 'Istanbul', code: 'IST' },
             { name: 'Paris', code: 'PRS' }
         ]);
+        console.log('vehicles : ', vehicles)
         const dropdownValue = ref(null);
         const fetchVehiclesData = async () => {
             try {
@@ -67,6 +68,9 @@ export default {
         const filters = ref({
        global: { value: null}
         });
+        const getBadgeSeverity = (isActive) => {
+    return isActive == 'active' ? 'success' : 'danger';
+};
 
         return {
             display,
@@ -77,7 +81,8 @@ export default {
             navigateTo,
             dropdownValues,
             dropdownValue,
-            filters
+            filters,
+            getBadgeSeverity
         };
     },
 };
@@ -135,7 +140,7 @@ export default {
                     <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
                 </template> -->
             </Dialog>
-            <DataTable :value="vehicles" :rows="5" :paginator="true" responsiveLayout="scroll">
+            <DataTable :value="vehicles" :loading="isLoading" :rows="5" :paginator="true" responsiveLayout="scroll">
                 <!-- <Column field="id" header="Id" :sortable="false">
                     <template #body="slotProps">
                         {{ slotProps.data.id }}
@@ -143,22 +148,27 @@ export default {
                 </Column> -->
                 <Column field="Registration" header="Registration" :sortable="false">
                     <template #body="slotProps">
-                        {{ slotProps.data.id }}
+                        {{ slotProps.data.registration_number }}
                     </template>
                 </Column>
                 <Column field="owner" header="Owner" :sortable="false">
                     <template #body="slotProps">
-                        {{ slotProps.data.name }}
+                        {{ slotProps.data.owner }}
                     </template>
                 </Column>
-                <Column field="status" header="Status" :sortable="false">
+               
+                <Column header="Status" field="status" :filterMenuStyle="{ width: '14rem' }" style="min-width: 5rem">
                     <template #body="slotProps">
-                        {{ slotProps.data.type }}
-                    </template>
+                            <span class="p-column-title">Status</span>
+                            <Tag :severity="getBadgeSeverity(slotProps.data.status)">
+                                {{ slotProps.data.status == 'active' ? 'Active' : 'Inactive' }}
+                            </Tag>
+                        </template>
                 </Column>
+               
                 <Column field="driver" header="Driver" :sortable="false">
                     <template #body="slotProps">
-                        {{ slotProps.data.vehicles }}
+                        {{ slotProps.data.driver }}
                     </template>
                 </Column>
                 <Column field="ownership" header="Ownership" :sortable="false">
@@ -174,6 +184,21 @@ export default {
                 <Column field="lease_team" header="Lease team" :sortable="false">
                     <template #body="slotProps">
                         {{ slotProps.data.food_handling_certificates }}
+                    </template>
+                </Column>
+                <Column field="rates" header="Rates" :sortable="false">
+                    <template #body="slotProps">
+                        {{ slotProps.data.rates }}
+                    </template>
+                </Column>
+                <Column field="lease_cost" header="Lease cost" :sortable="false">
+                    <template #body="slotProps">
+                        {{ slotProps.data.lease_cost }}
+                    </template>
+                </Column>
+                <Column field="vehicle_type" header="Vehicle type" :sortable="false">
+                    <template #body="slotProps">
+                        {{ slotProps.data.vehicle_type }}
                     </template>
                 </Column>
                 <!-- <Column headerStyle="width:4rem">

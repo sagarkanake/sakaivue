@@ -3,7 +3,7 @@ import axios from 'axios';
 import store from '@/store'; // Ensure you have the correct path to your store
 
 const apiClient = axios.create({
-  baseURL: 'https://api-v2-dev.farm2feed.com/api', // Replace with your API base URL
+  baseURL: import.meta.env.VITE_APP_API_BASE_URL, // Replace with your API base URL
   headers: {
     'Content-Type': 'application/json',
   },

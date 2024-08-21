@@ -5,14 +5,42 @@
 <script setup>
 import FormComponent from './Form.vue';
 import * as yup from 'yup';
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
 
 // Props
-defineProps({
+const props = defineProps({
     close: {
         type: Function,
         required: true,
-    },
+    }
+});
+// Access the Vuex store
+const store = useStore();
+
+const selected_driver = computed(() => store.getters['logistics/selected_driver']);
+const drivers = computed(() => store.getters['logistics/data']);
+onMounted(async () => {
+    try {
+        console.log('selected_driver',selected_driver , 'drivers', drivers)
+        const response = await fetch(`/drivers/${selected_driver?.id}`); // Replace with your actual API endpoint
+        const data = await response.json();
+
+        initialValues.value = {
+            name: data.name,
+            phone_number: data.phone_number,
+            driver_type: data.driver_type,
+            vehicle: data.vehicle,
+            code_of_conduct: data.code_of_conduct,
+            food_handling_certificate: data.food_handling_certificate,
+            drivers_license: data.drivers_license,
+            food_handling_certificate_expiration_date: data.food_handling_certificate_expiration_date,
+            code_of_conduct_expiration_date: data.code_of_conduct_expiration_date,
+            drivers_license_expiration_date: data.drivers_license_expiration_date,
+        };
+    } catch (error) {
+        console.error('Error fetching initial values:', error);
+    }
 });
 const initialValues = ref({
       name: 'sagar k',
