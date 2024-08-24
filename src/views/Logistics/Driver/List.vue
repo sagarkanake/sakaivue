@@ -5,11 +5,14 @@ import { useRouter } from 'vue-router';
 import AddDriverFrom from './Add.vue';
 import SampleForm from './SampleForm.vue';
 import EditDriverFrom from './Edit.vue'
+import { useToast } from 'primevue/usetoast';
+import { LogisticsService } from '../../../service/LogisticsService';
 const store = useStore();
 const router = useRouter();
 const display = ref(false);
 const editDisplay = ref(false);
 const loading = ref(true);
+const toast = useToast()
 
 const drivers = computed(() => store.getters['logistics/data']);
 const isLoading = computed(() => store.getters['logistics/loading']);
@@ -17,34 +20,45 @@ const error = computed(() => store.getters['logistics/error']);
 const selected_driver = computed(() => store.getters['logistics/selected_driver']);
 
 const dt = ref();
-console.log( 'drivers', drivers ,'selected_driver', selected_driver)
 
 const getItems = (rowData) => {
-    console.log('rowData')
 
     return [
-    {
-        label: 'Edit',
-        icon: 'pi pi-pencil',
-        command: () => handleMenuItemClick({ label: 'Edit' }, rowData)
-    },
-    {
-        label: 'Delete',
-        icon: 'pi pi-trash',
-        command: () => handleMenuItemClick({ label: 'Delete' } , rowData)
-    }
-    // Add more items here
-]};
+        {
+            label: 'Edit',
+            icon: 'pi pi-pencil',
+            command: () => handleMenuItemClick({ label: 'Edit' }, rowData)
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-trash',
+            command: () => handleMenuItemClick({ label: 'Delete' }, rowData)
+        }
+        // Add more items here
+    ]
+};
 
 const handleMenuItemClick = async (item, rowData) => {
-    console.log(`Menu item clicked: ${item.label}` , rowData);
-    console.log( 'drivers', drivers ,'selected_driver', selected_driver)
-
-    if(item.label == 'Edit'){
+    console.log('rowData',rowData)
+    if (item.label == 'Edit') {
         editOpen()
     }
-    await store.dispatch('logistics/setSelectedDriver',[rowData]);
-    // Add your custom logic here
+    if (item.label == 'Delete') {
+
+        try {
+            const response = await new LogisticsService().deleteDriver(rowData?.id);
+            
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Successfully deleted.', life: 1000 });
+            await store.dispatch('logistics/fetchDriversData');
+        } catch (error) {
+            console.log('error',error)
+            toast.add({ severity: 'error', summary: 'Deletion Failed..!!', detail: `${error?.response?.data?.message}`, life: 1000 });
+
+        }
+
+
+    }
+    await store.dispatch('logistics/setSelectedDriver', rowData);
 };
 
 function exportCSV() {
@@ -53,7 +67,6 @@ function exportCSV() {
 
 const fetchDriversData = async () => {
     try {
-        console.log('api call');
         await store.dispatch('logistics/fetchDriversData');
     } catch (err) {
         console.error('Error fetching data:', err);
@@ -106,7 +119,8 @@ const handleClick = (event) => {
                 <InputIcon class="pi pi-search" />
             </IconField>
             <div class="flex-col ">
-                <Button label="Export" icon="pi pi-file-export" @click="exportCSV($event)"  class=" flex-1 mr-2 mb-2"></Button>
+                <Button label="Export" icon="pi pi-file-export" @click="exportCSV($event)"
+                    class=" flex-1 mr-2 mb-2"></Button>
                 <Button @click="open" label="Add Driver" icon="pi pi-plus"
                     class=" custom-green-900-button  flex-1  mr-2 mb-2"></Button>
 
@@ -116,23 +130,24 @@ const handleClick = (event) => {
         <div>
             <Dialog class=" h-full " header="Add Driver" v-model:visible="display" :breakpoints="{ '960px': '75vw' }"
                 :style="{ width: '70vw', height: '70vw' }" :modal="true">
-                <AddDriverFrom :close="close"></AddDriverFrom> 
-                
+                <AddDriverFrom :close="close"></AddDriverFrom>
+
 
                 <!-- <template #footer>
                     <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
                 </template> -->
             </Dialog>
-            <Dialog class=" h-full " header="Edit Driver" v-model:visible="editDisplay " :breakpoints="{ '960px': '75vw' }"
-                :style="{ width: '70vw', height: '70vw' }" :modal="true">
-                <EditDriverFrom :close="editClose"></EditDriverFrom> 
-                
+            <Dialog class=" h-full " header="Edit Driver" v-model:visible="editDisplay"
+                :breakpoints="{ '960px': '75vw' }" :style="{ width: '70vw', height: '70vw' }" :modal="true">
+                <EditDriverFrom :close="editClose"></EditDriverFrom>
+
 
                 <!-- <template #footer>
                     <Button label="Ok" @click="close" icon="pi pi-check" class="p-button-outlined" />
                 </template> -->
             </Dialog>
-            <DataTable  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" :loading="loading" ref="dt" :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
+            <DataTable currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                :loading="loading" ref="dt" :value="drivers" :rows="5" :paginator="true" responsiveLayout="scroll">
                 <Column field="id" header="Id" :sortable="false">
                     <template #body="slotProps">
                         {{ slotProps.data.id }}
@@ -180,8 +195,9 @@ const handleClick = (event) => {
                         <!-- <Button icon="pi pi-trash" class="mt-2" severity="warning" rounded /> -->
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
-                                @click="$refs.menu2.toggle($event)"></Button>
-                            <Menu ref="menu2" :popup="true" :model="getItems(slotProps.data)" class="!min-w-40">
+                                @click="$refs[`menu-${slotProps.data.id}`].toggle($event)"></Button>
+                            <Menu :ref="`menu-${slotProps.data.id}`" :popup="true" :model="getItems(slotProps.data)"
+                                class="!min-w-40">
                             </Menu>
                         </div>
                         <!-- <Button icon="pi pi-trash" class="mt-2" severity="warning" rounded @click="confirmDeleteProduct(slotProps.data)" /> -->

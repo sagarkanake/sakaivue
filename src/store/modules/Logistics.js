@@ -38,7 +38,6 @@ export default {
       state.vehicles_error = error;
     },
     SET_SELECTED_DRIVER(state, driver) {
-      console.log('called', driver)
       state.selected_driver = driver;
     },
   },
@@ -50,7 +49,6 @@ export default {
       
         const data = await new LogisticsService().fetchAllVehicles();
         // const data = await response.json();
-        console.log('Data vehicles fetched:', data);
         commit('FETCH_DATA_VEHICLES_SUCCESS',  data.data.map(user => ({
             id: user.id,
             name: user.name,
@@ -78,7 +76,6 @@ export default {
       
         const data = await new LogisticsService().fetchAllDrivers();
         // const data = await response.json();
-        console.log('Data fetched:', data);
         commit('FETCH_DATA_SUCCESS',  data.data.map(user => ({
             id: user.id,
             name: user.user.name,
@@ -94,7 +91,6 @@ export default {
       }
     },
     async setSelectedDriver({ commit }, driver) {
-      console.log('SET_SELECTED_DRIVER', driver)
       commit('SET_SELECTED_DRIVER', driver);
     },
   },

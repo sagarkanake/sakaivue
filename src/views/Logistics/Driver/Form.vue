@@ -36,7 +36,6 @@ const loading = ref(true);
 // Define validation schema using yup
 
 onMounted(async () => {
-  console.log('props.type', props.type)
   if (props.initialValues.food_handling_certificate) {
     food_handling_certificate_file_name.value = props.initialValues.food_handling_certificate.name;
     food_handling_certificate_file_data.value = props.initialValues.food_handling_certificate;
@@ -94,9 +93,7 @@ onMounted(async () => {
   }
 
   try {
-    console.log('api called')
     const response = await new LogisticsService().fetchAllVehiclesList();
-    console.log('api response ', response)
 
     // Assuming response.data is an array of options
     vechicles_options.value = response.map((optn) => ({
@@ -110,15 +107,12 @@ onMounted(async () => {
   }
 });
 function onSubmit(values) {
-  console.log('Form Submitted!', values);
-
   // Create FormData and append form values
   const formData = new FormData();
   Object.keys(values).forEach(key => {
     formData.append(key, values[key]);
   });
   // Append file if available
-  console.log('food_handling_certificate_file_data', food_handling_certificate_file_data.value)
   if (food_handling_certificate_file_data.value) {
     values.food_handling_certificate = food_handling_certificate_file_data.value;
   }
@@ -131,7 +125,7 @@ function onSubmit(values) {
 
 
  
-  props.handleSubmit(formData)
+  props.handleSubmit(values)
 }
 const toast = useToast();
 
@@ -189,7 +183,6 @@ function handleFileChangeCodeOfConduct(event) {
     code_of_conduct_file_name.value = '';
   }
 
-  console.log('code_of_conduct_file_name', code_of_conduct_file_name, 'code_of_conduct_file_data', code_of_conduct_file_data)
 
 }
 
@@ -233,29 +226,41 @@ function onUpload() {
   toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 }
 const driverTypes = ref([
-  { name: '1', label: 'Own' },
-  { name: '2', label: 'Lease' },
-  { name: '3', label: 'Truck owner' }
+  { name: 'own', label: 'Own' },
+  { name: 'lease', label: 'Lease' },
+  { name: 'truck_owner', label: 'Truck owner' }
 ]);
 const selectedPaymentType = ref(null);
 // Define a reactive key based on the initialValues
-const dropdownKey = ref(props.initialValues.driver_type);
+const dropdownKey = ref(0);
+const dropdownKeyVehicle = ref(0);
 // Watch for changes in the selected driver type and update the key
 watch(() => props.initialValues.driver_type, () => {
   dropdownKey.value += 1; // Increment key to force re-render
 
 });
-function handleDropdownChange(selectedValue) {
+
+function handleDropdownChange(selectedValue, setFieldValue) {
   // Log the selected value's 'name' to ensure it's being passed correctly
-  console.log('Selected value:', selectedValue.name);
 
   // Update dropdownKey with the selected value's name
-  dropdownKey.value = selectedValue.name;
+  dropdownKey.value += 1;;
+  setFieldValue('driver_type', selectedValue);
+
 
   // Log dropdownKey to see if it updates
-  console.log('dropdownKey inside', dropdownKey.value);
 }
-console.log('dropdownKey', dropdownKey.value)
+
+function handleVehicleChange(selectedValue , setFieldValue) {
+  // Log the selected value's 'name' to ensure it's being passed correctly
+  console.log('Selected vehicle value:', selectedValue.name);
+
+  // Update the field value
+  setFieldValue('vehicle', selectedValue);
+  dropdownKeyVehicle.value += 1;
+
+  // Log dropdownKey to see if it updates
+}
 const customBase64Uploader = async (event) => {
   const file = event.files[0];
   const reader = new FileReader();
@@ -268,7 +273,6 @@ const customBase64Uploader = async (event) => {
   };
 }
 const customUploadHandler = async (event) => {
-  console.log('called')
   codeOfConductFileNameClearFile()
 }
 const buttonLabel = computed(() => {
@@ -283,9 +287,11 @@ const buttonLabel = computed(() => {
 
 <template>
   <div id="app">
-
-    <Form :initial-values="props.initialValues" :validation-schema="props.validationSchema" @submit="onSubmit"
-      v-slot="{ values, handleSubmit }">
+    <div v-if="loading" class="loading-container">
+      <ProgressSpinner class='custom-spinner' />
+    </div>
+    <Form :loading="true" :initial-values="props.initialValues" :validation-schema="props.validationSchema" @submit="onSubmit"
+      v-slot="{ values, handleSubmit , setFieldValue }">
       <div class="grid ml-0 mr-0 mt-0">
         <div class="col-12">
           <div class="p-fluid formgrid grid">
@@ -309,7 +315,7 @@ const buttonLabel = computed(() => {
 
               <Field id="driver_type" name="driver_type">
                 <template #default="{ field, meta }">
-                  <Dropdown v-model="field.value" @change="handleDropdownChange(field.value)" :key="dropdownKey.value"
+                  <Dropdown v-model="field.value" @change="handleDropdownChange(field.value, setFieldValue)" :key="dropdownKey.value"
                     :options="driverTypes" optionLabel="label" placeholder="Select" class="w-full"
                     :class="{ 'p-invalid': meta.touched && meta.error }" :style="{ borderRadius: '8px' }" />
                   <ErrorMessage name="driver_type" class="p-error mt-1" />
@@ -320,9 +326,9 @@ const buttonLabel = computed(() => {
             <div class="field col-12 md:col-6">
               <label for="vehicle">Vehicle</label>
               <!-- <Field id="vehicle" name="vehicle" as="InputText" :class="['p-inputtext', 'w-full']" /> -->
-              <Field id="vehicle" name="vehicle">
+              <Field id="vehicle" name="vehicle" >
                 <template #default="{ field, meta }">
-                  <Dropdown v-model="field.value" @change="handleDropdownChange(field.value)" :key="dropdownKey.value"
+                  <Dropdown v-model="field.value" @change="handleVehicleChange(field.value, setFieldValue)" :key="dropdownKeyVehicle.value"
                     :loading="loading" :options="vechicles_options" optionLabel="label" placeholder="Select"
                     class="w-full" :class="{ 'p-invalid': meta.touched && meta.error }"
                     :style="{ borderRadius: '8px' }" />
@@ -451,7 +457,7 @@ const buttonLabel = computed(() => {
       <div class="form-footer">
         <div class="flex gap-3 justify-content-end">
           <Button label="Cancel" @click="props.close" icon="pi pi-times" class="p-button-outlined" />
-          <Button :label="buttonLabel" @click="handleSubmit(onSubmit)" icon="pi pi-plus" type="submit" />
+          <Button :label="buttonLabel"  icon="pi pi-plus" type="submit" />
         </div>
       </div>
 
@@ -462,6 +468,18 @@ const buttonLabel = computed(() => {
 </template>
 
 <style scoped>
+/* Center the ProgressSpinner spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust as needed */
+}
+.custom-spinner .p-progress-spinner {
+  color: black !important; /* Set color to black */
+  width: 50px;  /* Set width to a smaller size */
+  height: 50px; /* Set height to a smaller size */
+}
 .grid {
   flex-grow: 1;
   /* Ensure the grid takes up all available space */

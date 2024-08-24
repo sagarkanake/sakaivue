@@ -1,5 +1,7 @@
 <template>
-    <FormComponent :initialValues="initialValues"  :type="type"  :validationSchema="validationSchema" :handleSubmit="handleSubmit" :close="close" />
+    <FormComponent v-if="initialValues" 
+    :initialValues="initialValues"  :type="type" :validationSchema="validationSchema"
+        :handleSubmit="handleSubmit" :close="close" />
 </template>
 
 <script setup>
@@ -7,6 +9,8 @@ import FormComponent from './Form.vue';
 import * as yup from 'yup';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import { LogisticsService } from '../../../service/LogisticsService';
+import { useToast } from 'primevue/usetoast';
 
 // Props
 const props = defineProps({
@@ -17,43 +21,33 @@ const props = defineProps({
 });
 // Access the Vuex store
 const store = useStore();
-
+const toast = useToast();
+const initialValues = ref(null);
 const selected_driver = computed(() => store.getters['logistics/selected_driver']);
 const drivers = computed(() => store.getters['logistics/data']);
+const driverTypes = 
+  { 'own': 'Own' , 'lease' : 'Lease' , 'truck_owner' : 'Truck owner' }
+
 onMounted(async () => {
     try {
-        console.log('selected_driver',selected_driver , 'drivers', drivers)
-        const response = await fetch(`/drivers/${selected_driver?.id}`); // Replace with your actual API endpoint
-        const data = await response.json();
-
+        const data = await new LogisticsService().fetchDriverById(selected_driver.value.id);
         initialValues.value = {
-            name: data.name,
-            phone_number: data.phone_number,
-            driver_type: data.driver_type,
-            vehicle: data.vehicle,
+            name: data.user.name,
+            phone_number: data.user.phone,
+            driver_type: { name: data.type , label: driverTypes[`${data.type}`]  },
+            vehicle: { name: data?.vehicle?.id, label: data?.vehicle?.registration_number },
             code_of_conduct: data.code_of_conduct,
             food_handling_certificate: data.food_handling_certificate,
             drivers_license: data.drivers_license,
-            food_handling_certificate_expiration_date: data.food_handling_certificate_expiration_date,
-            code_of_conduct_expiration_date: data.code_of_conduct_expiration_date,
-            drivers_license_expiration_date: data.drivers_license_expiration_date,
+            food_handling_certificate_expiration_date: data.food_handling_certificate_expiration_date || '',
+            code_of_conduct_expiration_date: data.code_of_conduct_expiration_date || '',
+            drivers_license_expiration_date: data.drivers_license_expiration_date || '',
         };
     } catch (error) {
         console.error('Error fetching initial values:', error);
     }
 });
-const initialValues = ref({
-      name: 'sagar k',
-      phone_number: 1234567890,
-      driver_type: { name: '1', label: 'Own' },
-      vehicle: { name: '1', label: 'Own' },
-      code_of_conduct: 'https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg',
-      food_handling_certificate: 'https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg',
-      drivers_license: 'https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg',
-      food_handling_certificate_expiration_date: '14/08/2024',
-      code_of_conduct_expiration_date: '14/08/2024',
-      drivers_license_expiration_date: '14/08/2024',
-    })
+
 const type = 'edit'
 // Validation schema
 const validationSchema = yup.object({
@@ -65,33 +59,38 @@ const validationSchema = yup.object({
         .required('Phone number is required'),
     driver_type: yup.object().required('Driver type is required'),
     // vehicle: yup.string().required('Vehicle is required'),
-    code_of_conduct: yup.mixed().required('Code of conduct file is required'),
-    food_handling_certificate: yup.mixed().required('Food Handling Certificate file is required'),
-    drivers_license: yup.mixed().required('Drivers License file is required'),
+    // code_of_conduct: yup.mixed().required('Code of conduct file is required'),
+    // food_handling_certificate: yup.mixed().required('Food Handling Certificate file is required'),
+    // drivers_license: yup.mixed().required('Drivers License file is required'),
     food_handling_certificate_expiration_date: yup.date().transform((value, orignalValue) => orignalValue === '' ? null : value).nullable().required('Expiration date is required'),
     code_of_conduct_expiration_date: yup.date().transform((value, orignalValue) => orignalValue === '' ? null : value).nullable().required('Expiration date is required'),
     drivers_license_expiration_date: yup.date().transform((value, orignalValue) => orignalValue === '' ? null : value).nullable().required('Expiration date is required'),
 });
 
-const handleSubmit = (formData) => {
+const handleSubmit = async (formData) => {
 
 
-  console.log('Form Data:', formData);
 
-  // Send formData to your API using fetch or axios
-  // Example using fetch
-  fetch('/your-api-endpoint', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      toast.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      toast.add({ severity: 'error', summary: 'Error', detail: 'Submission Failed', life: 3000 });
-    });
+    // Send formData to your API using fetch or axios
+    // Example using fetch
+    try {
+    formData.payment_method = "bank_transfer",
+    formData.payment_details = {
+    "bank_name": "Example Bank",
+    "account_number": "1234567890"
+    }
+    formData.vehicle_id =formData?.vehicle.name
+    // formData.username = toCamelCase(formData.name)  
+    formData.phone = formData.phone_number
+    formData.address = '123 Main St, Anytown, USA'
+    formData.type = formData.driver_type?.name
+    const response = await new LogisticsService().editDriver(formData,selected_driver.value.id);
+    toast.add({ severity: 'success', summary: 'Successful', detail: 'Form Submitted.', life: 1000 });
+    await store.dispatch('logistics/fetchDriversData');
+    props.close()
+  } catch (error) {
+    console.log('error',error)
+    toast.add({ severity: 'error', summary: 'Submission Failed..!!', detail: `${error?.response?.data?.message}`, life: 1000 });
+  }
 }
 </script>
